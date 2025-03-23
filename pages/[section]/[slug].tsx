@@ -7,6 +7,7 @@ import {
 } from "@/lib/getContent";
 import { markdownToHtml } from "@/lib/markdownToHtml";
 import matter from "gray-matter";
+import { useEffect } from "react";
 
 type Props = {
   content: string;
@@ -14,6 +15,20 @@ type Props = {
 };
 
 export default function BlogPost({ content, meta }: Props) {
+  // Load the Giscus script on mount
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/widget.js';
+    script.async = true;
+    script.setAttribute('data-repo', 'horaon76/onebitpage');
+    script.setAttribute('data-repo-id', '953134161');
+    script.setAttribute('data-category', 'General');
+    script.setAttribute('data-category-id', '44138985');
+    script.setAttribute('data-mapping', 'url');
+    script.setAttribute('data-term', window.location.href); // Unique term based on the post URL
+    document.body.appendChild(script);
+  }, []);
+
   return (
     <div className="onepagebit">
       <h1>{meta.title}</h1>
@@ -23,6 +38,9 @@ export default function BlogPost({ content, meta }: Props) {
       </div>
       <hr />
       <div dangerouslySetInnerHTML={{ __html: content }} />
+
+      {/* Giscus comment section */}
+      <div id="giscus" />
     </div>
   );
 }
