@@ -1,6 +1,34 @@
 /* Apply Lato font globally */
 body {
   font-family: "Lato", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.header{
+  display: flex;
+  align-self: center;
+  height: 60px;
+  padding: 0 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.header__item:first-child{
+  font-weight: 700;
+}
+.header__item{
+  margin-right: 20px;
+  font-size: 16px;
+  color: #000;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+.header__item a{
+  text-decoration: none;
+}
+.header__item a span{
+  font-weight: 300;
+  font-size: 16px;
 }
 
 /* Update OnePageBit styles */
