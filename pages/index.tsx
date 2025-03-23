@@ -39,7 +39,7 @@ export default function Home({ menu }: Props) {
             <List
               bordered
               dataSource={menu[section]}
-              renderItem={(post: { slug: any; title: any; }) => (
+              renderItem={(post: { slug: string; title: string; }) => (
                 <List.Item>
                   <Link href={`/${section}/${post.slug}`}>{post.title}</Link>
                 </List.Item>
