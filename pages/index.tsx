@@ -11,7 +11,7 @@ type Props = { menu: Record<string, SectionData> };
 
 export const getStaticProps: GetStaticProps = async () => {
   const sections = getSections();
-  let menu: Record<string, SectionData> = {};
+  const menu: Record<string, SectionData> = {};
 
   sections.forEach((section) => {
     menu[section] = getFilesInSection(section).map(({ slug, title }) => ({
