@@ -18,7 +18,7 @@ export default function BlogPost({ content, meta }: Props) {
   // Load the Giscus script on mount
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = 'https://giscus.app/widget.js';
+    script.src = 'https://giscus.app/client.js';
     script.async = true;
     script.setAttribute('data-repo', 'horaon76/onebitpage');
     script.setAttribute('data-repo-id', '953134161');
@@ -40,7 +40,7 @@ export default function BlogPost({ content, meta }: Props) {
       <div dangerouslySetInnerHTML={{ __html: content }} />
 
       {/* Giscus comment section */}
-      <div id="giscus" />
+      <div id="giscus" className="giscus"/>
     </div>
   );
 }
