@@ -1,8 +1,15 @@
 import type { NextConfig } from "next";
 /** @type {import('next').NextConfig} */
+const withTM = require("next-transpile-modules")([
+  "rc-util", 
+  "antd",
+  "rc-pagination",
+  "rc-picker",
+  "rc-input"
+]); // Add modules to transpile
 const isProd = process.env.NODE_ENV === "production";
 
-const nextConfig: NextConfig = {
+const nextConfig: NextConfig = withTM({
   output: "export",
   basePath: isProd ? "/onebitpage" : "",
   images: { unoptimized: true },
@@ -10,22 +17,11 @@ const nextConfig: NextConfig = {
   /**
    * ✅ Automatically transpile ALL `rc-*` packages dynamically
    */
-  transpilePackages: [
-    "antd",
-    "@ant-design",
-    ...[
-     "antd",
-    "rc-util",
-    "rc-menu",
-    "rc-picker",
-    "rc-dialog",
-    "rc-dropdown",
-    "rc-tree",
-    "rc-input"
-    ],
-  ],
-
-  webpack: (config) => {
+  transpilePackages: ["antd", "@ant-design"],
+  experimental: {
+    esmExternals: "loose", // Enables ESM support
+  },
+  webpack: (config: { module: { rules: { test: RegExp; include: RegExp; type: string; }[]; }; }) => {
     config.module.rules.push({
       test: /\.mjs$/,
       include: /node_modules/,
@@ -33,6 +29,6 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
-};
+});
 
 export default nextConfig;

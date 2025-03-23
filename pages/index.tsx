@@ -1,6 +1,6 @@
 import { GetStaticProps } from "next";
 import Link from "next/link";
-import { getSections, getFilesInSection } from "@/lib/getContent";
+import { getSections, getFilesInSection } from "@/lib/getContent"; // Add `.js` for ESM
 import { Layout, List, Typography } from "antd";
 
 const { Header, Content, Footer } = Layout;
@@ -27,7 +27,9 @@ export default function Home({ menu }: Props) {
   return (
     <Layout>
       <Header>
-        <Title level={3} style={{ color: "white" }}>📖 Section-wise Blog</Title>
+        <Title level={3} style={{ color: "white" }}>
+          📖 Section-wise Blog
+        </Title>
       </Header>
 
       <Content style={{ padding: "20px" }}>
@@ -37,7 +39,7 @@ export default function Home({ menu }: Props) {
             <List
               bordered
               dataSource={menu[section]}
-              renderItem={(post) => (
+              renderItem={(post: { slug: any; title: any; }) => (
                 <List.Item>
                   <Link href={`/${section}/${post.slug}`}>{post.title}</Link>
                 </List.Item>
@@ -47,9 +49,7 @@ export default function Home({ menu }: Props) {
         ))}
       </Content>
 
-      <Footer style={{ textAlign: "center" }}>
-        @onepagebit
-      </Footer>
+      <Footer style={{ textAlign: "center" }}>@onepagebit</Footer>
     </Layout>
   );
 }
