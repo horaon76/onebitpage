@@ -46,7 +46,6 @@ jobs:
       - name: 🔨 Build Next.js Static Export
         run: |
           npm run build
-          npm run export
 
       - name: 📤 Upload `out/` for Deployment
         uses: actions/upload-pages-artifact@v3
