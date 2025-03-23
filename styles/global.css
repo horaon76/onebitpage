@@ -1,0 +1,135 @@
+/* Apply Lato font globally */
+body {
+  font-family: "Lato", sans-serif;
+}
+
+/* Update OnePageBit styles */
+.onepagebit {
+  font-family: "Lato", sans-serif;
+  font-size: 1.2rem;
+  color: #333;
+  line-height: 1.8;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  line-height: 1.8;
+  color: #333;
+}
+
+/* Headings */
+.onepagebit h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.onepagebit h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 40px;
+  margin-bottom: 15px;
+}
+
+.onepagebit h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+/* Paragraphs */
+.onepagebit p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #444;
+}
+
+/* Blockquotes (for emphasis) */
+.onepagebit blockquote {
+  border-left: 4px solid #bbb;
+  padding: 10px 20px;
+  margin: 20px 0;
+  color: #555;
+  font-style: italic;
+  background: #f9f9f9;
+}
+
+/* Code blocks */
+.onepagebit pre {
+  background: #272822;
+  color: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+
+.onepagebit code {
+  font-family: "Courier New", monospace;
+  background: #eee;
+  padding: 2px 5px;
+  border-radius: 4px;
+  color: #d63384;
+}
+
+/* Lists */
+.onepagebit ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.onepagebit ol {
+  list-style-type: decimal;
+  padding-left: 20px;
+}
+
+/* Images */
+.onepagebit img {
+  max-width: 100%;
+  display: block;
+  margin: 20px auto;
+  border-radius: 8px;
+}
+
+/* Tables */
+.onepagebit table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 1rem;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.onepagebit th {
+  background: #f4f4f4;
+  font-weight: bold;
+}
+
+.onepagebit th,
+.onepagebit td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.onepagebit tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+/* Horizontal Rule */
+.onepagebit hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 40px 0;
+}
+
+/* Blog Metadata */
+.blog-meta {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.blog-meta span {
+  margin-right: 15px;
+}
