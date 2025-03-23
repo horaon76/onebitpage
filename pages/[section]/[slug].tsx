@@ -23,7 +23,7 @@ export default function BlogPost({ content, meta }: Props) {
     script.setAttribute('data-repo', 'horaon76/onebitpage');
     script.setAttribute('data-repo-id', '953134161');
     script.setAttribute('data-category', 'General');
-    script.setAttribute('data-category-id', '44138985');
+    script.setAttribute('data-category-id', '44139119');
     script.setAttribute('data-mapping', 'url');
     script.setAttribute('data-term', window.location.href); // Unique term based on the post URL
     document.body.appendChild(script);
