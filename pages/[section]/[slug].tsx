@@ -1,5 +1,10 @@
 import { GetStaticProps, GetStaticPaths } from "next";
-import { getMarkdownContent, getSections, getFilesInSection } from "@/lib/getContent";
+import {
+  getMarkdownContent,
+  getSections,
+  getFilesInSection,
+  getNestedFiles,
+} from "@/lib/getContent";
 import { markdownToHtml } from "@/lib/markdownToHtml";
 import matter from "gray-matter";
 
@@ -11,21 +16,18 @@ type Props = {
 export default function BlogPost({ content, meta }: Props) {
   return (
     <div className="onepagebit">
-      {/* Blog Metadata */}
       <h1>{meta.title}</h1>
       <div className="blog-meta">
         <span>📅 {meta.date}</span>
         <span>📂 {meta.category}</span>
       </div>
       <hr />
-
-      {/* Blog Content */}
       <div dangerouslySetInnerHTML={{ __html: content }} />
     </div>
   );
 }
 
-// Generate static paths for all markdown files
+// ✅ Generate static paths for all markdown files
 export const getStaticPaths: GetStaticPaths = async () => {
   const sections = getSections();
   const paths: { params: { section: string; slug: string } }[] = [];
@@ -40,11 +42,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: false };
 };
 
-// Generate static props for each page
+// ✅ Generate static props for each blog post
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const markdownContent = getMarkdownContent(params?.slug as string, params?.section as string);
-  const { content, data } = matter(markdownContent); // Parse front matter
-  const htmlContent = markdownToHtml(content);
+  if (!params?.section || !params?.slug) return { notFound: true };
 
-  return { props: { content: htmlContent, meta: data } };
+  const markdownContent = getMarkdownContent(
+    params.slug as string,
+    params.section as string
+  );
+  const { content, data } = matter(markdownContent); // Extract front matter
+  const htmlContent = markdownToHtml(content);
+  const menu = getNestedFiles(); // Ensure this runs on the server
+  return { props: { content: htmlContent, meta: data, menu } };
 };

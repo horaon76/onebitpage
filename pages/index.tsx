@@ -1,55 +1,20 @@
 import { GetStaticProps } from "next";
+import { Box, Heading, Text } from "@radix-ui/themes";
 import Link from "next/link";
-import { getSections, getFilesInSection } from "@/lib/getContent"; // Add `.js` for ESM
-import { Layout, List, Typography } from "antd";
-
-const { Header, Content, Footer } = Layout;
-const { Title } = Typography;
+import { getSections, getFilesInSection, getNestedFiles } from "@/lib/getContent";
 
 type SectionData = { slug: string; title: string }[];
 type Props = { menu: Record<string, SectionData> };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const sections = getSections();
-  const menu: Record<string, SectionData> = {};
-
-  sections.forEach((section) => {
-    menu[section] = getFilesInSection(section).map(({ slug, title }) => ({
-      slug,
-      title,
-    }));
-  });
-
+  const menu = getNestedFiles(); // Ensure this runs on the server
   return { props: { menu } };
 };
 
 export default function Home({ menu }: Props) {
   return (
-    <Layout>
-      <Header>
-        <Title level={3} style={{ color: "white" }}>
-          📖 Section-wise Blog
-        </Title>
-      </Header>
-
-      <Content style={{ padding: "20px" }}>
-        {Object.keys(menu).map((section) => (
-          <div key={section} style={{ marginBottom: "20px" }}>
-            <Title level={4}>{section.toUpperCase()}</Title>
-            <List
-              bordered
-              dataSource={menu[section]}
-              renderItem={(post: { slug: string; title: string; }) => (
-                <List.Item>
-                  <Link href={`/${section}/${post.slug}`}>{post.title}</Link>
-                </List.Item>
-              )}
-            />
-          </div>
-        ))}
-      </Content>
-
-      <Footer style={{ textAlign: "center" }}>@onepagebit</Footer>
-    </Layout>
+    <Box p="4">
+      <Heading size="4">📖 Section-wise Blog</Heading>
+    </Box>
   );
 }
