@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 /** @type {import('next').NextConfig} */
 const withTM = require("next-transpile-modules")([
   "rc-util", 
@@ -18,12 +19,25 @@ const nextConfig: NextConfig = withTM({
   experimental: {
     esmExternals: "loose", // Enables ESM support
   },
-  webpack: (config: { module: { rules: { test: RegExp; include: RegExp; type: string; }[]; }; }) => {
+  webpack: (config: {
+    resolve: any; module: { rules: { test: RegExp; include: RegExp; type: string; }[]; }; 
+}) => {
     config.module.rules.push({
       test: /\.mjs$/,
       include: /node_modules/,
       type: "javascript/auto",
     });
+     // Ensure `resolve` is properly initialized
+     if (!config.resolve) {
+      config.resolve = {}; // Initialize `resolve` if it doesn't exist
+    }
+
+    // Add alias for `rc-util`
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      "rc-util": path.resolve(__dirname, "node_modules/rc-util"),
+    };
+
     return config;
   },
 });
