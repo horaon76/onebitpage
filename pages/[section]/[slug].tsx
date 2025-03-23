@@ -28,7 +28,7 @@ export default function BlogPost({ content, meta }: Props) {
 // Generate static paths for all markdown files
 export const getStaticPaths: GetStaticPaths = async () => {
   const sections = getSections();
-  let paths: { params: { section: string; slug: string } }[] = [];
+  const paths: { params: { section: string; slug: string } }[] = [];
 
   sections.forEach((section) => {
     const files = getFilesInSection(section);
