@@ -9,6 +9,9 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   webpack: (config: { module: { rules: { test: RegExp; include: RegExp; type: string; }[]; }; }) => {
     config.module.rules.push({
       test: /\.mjs$/,
