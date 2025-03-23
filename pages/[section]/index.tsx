@@ -36,7 +36,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const section = params?.section as string;
   const files = getFilesInSection(section)
-    .map(({ slug, title }) => {
+    .map(({ slug }) => {
       const markdown = getMarkdownContent(slug, section);
       const { data } = matter(markdown);
       return { slug, title: data.title, date: data.date, category: data.category };
