@@ -11,17 +11,10 @@ const isProd = process.env.NODE_ENV === "production";
 
 const nextConfig: NextConfig = withTM({
   output: "export",
-  basePath: isProd ? "/onebitpage" : "",
+  basePath: "/onebitpage", // Change this if needed
+  assetPrefix: "/onebitpage/",
+  transpilePackages: [/^rc-.*/], // Force Next.js to transpile rc-* packages
   images: { unoptimized: true },
-
-  /**
-   * ✅ Automatically transpile ALL `rc-*` packages dynamically
-   */
-  transpilePackages: [ "rc-util", 
-    "antd",
-    "rc-pagination",
-    "rc-picker",
-    "rc-input"],
   experimental: {
     esmExternals: "loose", // Enables ESM support
   },
