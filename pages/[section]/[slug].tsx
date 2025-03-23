@@ -1,13 +1,10 @@
 import { GetStaticProps, GetStaticPaths } from "next";
-import {
-  getMarkdownContent,
-  getSections,
-  getFilesInSection,
-  getNestedFiles,
-} from "@/lib/getContent";
+import { getMarkdownContent, getSections, getFilesInSection, getNestedFiles } from "@/lib/getContent";
 import { markdownToHtml } from "@/lib/markdownToHtml";
 import matter from "gray-matter";
 import { useEffect } from "react";
+import MarkdownIt from "markdown-it";
+import SectionParser from '@/components/SectionJumper';
 
 type Props = {
   content: string;
@@ -15,20 +12,34 @@ type Props = {
 };
 
 export default function BlogPost({ content, meta }: Props) {
+  // Initialize MarkdownIt parser
+  const md = new MarkdownIt();
+
   // Load the Giscus script on mount
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://giscus.app/client.js';
     script.async = true;
-    script.setAttribute('data-repo', 'horaon76/onebitpage');
-    script.setAttribute('data-repo-id', '953134161');
-    script.setAttribute('data-category', 'General');
-    script.setAttribute('data-category-id', '44139119');
+    script.setAttribute('data-repo', '/');
+    script.setAttribute('data-repo-id', '');
+    script.setAttribute('data-category', '');
+    script.setAttribute('data-category-id', '');
     script.setAttribute('data-mapping', 'url');
-    script.setAttribute('data-term', window.location.href); // Unique term based on the post URL
+    if (typeof window !== "undefined") {
+      script.setAttribute('data-term', window.location.href); // Unique term based on the post URL
+    }
+    script.setAttribute('data-mapping', 'pathname');
+    script.setAttribute('data-strict', '0');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'bottom');
+    script.setAttribute('data-theme', 'preferred_color_scheme');
+    script.setAttribute('data-lang', 'en');
+    script.setAttribute('crossorigin', 'anonymous');
     document.body.appendChild(script);
-  }, []);
-
+  });
+    // Generate the section jumper (table of contents)
+  
   return (
     <div className="onepagebit">
       <h1>{meta.title}</h1>
@@ -37,6 +48,13 @@ export default function BlogPost({ content, meta }: Props) {
         <span>📂 {meta.category}</span>
       </div>
       <hr />
+      
+      {/* Section Jumper - Table of Contents */}
+      <div className="section-jumper-container">
+        <SectionParser content={content} />
+      </div>
+
+      {/* Blog Content */}
       <div dangerouslySetInnerHTML={{ __html: content }} />
 
       {/* Giscus comment section */}

@@ -69,6 +69,9 @@ body {
   height: 60px;
   padding: 0 16px;
   border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  background: #fff;
 }
 .header__item:first-child{
   font-weight: 700;
@@ -218,4 +221,80 @@ body {
 
 .blog-meta span {
   margin-right: 15px;
+}
+
+#jumper-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+#jumper-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#jumper-container li {
+  margin: 5px 0;
+}
+
+#jumper-container a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+#jumper-container a:hover {
+  text-decoration: underline;
+}
+/* Container for the whole page */
+.blog-container {
+  display: flex;
+  margin-top: 20px;
+  gap: 40px;
+}
+
+/* Floating sticky section jumper */
+.section-jumper-container {
+  position: sticky;
+  top: 80px;
+  width: 250px;
+  overflow-y: auto;
+  position: fixed;
+  right: 0;
+  font-size: 14px;
+  border-left: 2px solid #46a758;
+}
+.section-jumper-container ul{
+  list-style: none;
+}
+.section-jumper-container ul a{
+  color: #000;
+  text-decoration: none;
+}
+.section-jumper {
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.jumper-item {
+  margin-bottom: 10px;
+}
+
+.jumper-item a {
+  text-decoration: none;
+  color: #0070f3;
+  font-size: 16px;
+}
+
+.jumper-item a:hover {
+  text-decoration: underline;
+}
+
+.jumper-item a:active {
+  color: #003366;
 }
