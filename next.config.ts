@@ -17,7 +17,11 @@ const nextConfig: NextConfig = withTM({
   /**
    * ✅ Automatically transpile ALL `rc-*` packages dynamically
    */
-  transpilePackages: ["antd", "@ant-design"],
+  transpilePackages: [ "rc-util", 
+    "antd",
+    "rc-pagination",
+    "rc-picker",
+    "rc-input"],
   experimental: {
     esmExternals: "loose", // Enables ESM support
   },
