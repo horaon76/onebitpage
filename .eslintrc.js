@@ -1,6 +1,6 @@
 module.exports = {
   rules: {
-    "prefer-const": "off",
-    "@typescript-eslint/no-unused-vars": "off"
+    "prefer-const": "off", // Disable 'prefer-const' rule
+    "@typescript-eslint/no-unused-vars": "off" // Disable unused vars rule
   }
 };

@@ -35,9 +35,9 @@
     "typescript": "^5"
   },
   "eslintConfig": {
-  "rules": {
-    "prefer-const": "off",
-    "@typescript-eslint/no-unused-vars": "off"
+    "rules": {
+      "prefer-const": "off",
+      "@typescript-eslint/no-unused-vars": "off"
+    }
   }
-}
 }
