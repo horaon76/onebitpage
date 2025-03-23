@@ -14,7 +14,7 @@ const nextConfig: NextConfig = withTM({
   output: "export",
   basePath: "/onebitpage", // Change this if needed
   assetPrefix: "/onebitpage/",
-  transpilePackages: [/^rc-.*/], // Force Next.js to transpile rc-* packages
+  transpilePackages: [/^rc-.*/, "antd"],  
   images: { unoptimized: true },
   experimental: {
     esmExternals: "loose", // Enables ESM support
