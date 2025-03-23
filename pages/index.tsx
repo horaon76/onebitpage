@@ -1,7 +1,7 @@
 import { GetStaticProps } from "next";
 import Link from "next/link";
 import { getSections, getFilesInSection } from "@/lib/getContent";
-import { Layout, Menu, List, Typography } from "antd";
+import { Layout, List, Typography } from "antd";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
@@ -48,7 +48,7 @@ export default function Home({ menu }: Props) {
       </Content>
 
       <Footer style={{ textAlign: "center" }}>
-        Powered by Next.js & Ant Design
+        @onepagebit
       </Footer>
     </Layout>
   );
