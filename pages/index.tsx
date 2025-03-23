@@ -10,7 +10,7 @@ export const getStaticProps: GetStaticProps = async () => {
   return { props: { menu } };
 };
 
-export default function Home({ menu }: Props) {
+export default function Home() {
   return (
     <Box p="4">
       <Heading size="4">📖 Section-wise Blog</Heading>
