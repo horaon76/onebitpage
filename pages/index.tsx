@@ -1,7 +1,6 @@
 import { GetStaticProps } from "next";
-import { Box, Heading, Text } from "@radix-ui/themes";
-import Link from "next/link";
-import { getSections, getFilesInSection, getNestedFiles } from "@/lib/getContent";
+import { Box, Heading } from "@radix-ui/themes";
+import { getNestedFiles } from "@/lib/getContent";
 
 type SectionData = { slug: string; title: string }[];
 type Props = { menu: Record<string, SectionData> };
