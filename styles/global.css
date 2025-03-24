@@ -104,14 +104,13 @@ body {
 }
 
 .header__item:first-child {
-  font-weight: 700;
+  font-weight: 500;
   font-size: 24px;
   letter-spacing: 0.03em;
-  color: #46a758;
 }
 
 .header__item:first-child a {
-  background: #8BC34A;
+  background: #399918;
   color: #fff;
   padding: 0 12px;
   height: 36px;
@@ -370,6 +369,9 @@ body {
   flex-direction: column;
   margin: 0 auto;
   text-align: center;
+}
+.homepage__brand h1{
+  color: #5CB338;
 }
 .homepage__category{
   margin: 0 auto;
