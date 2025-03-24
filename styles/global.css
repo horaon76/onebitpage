@@ -1,42 +1,62 @@
 /* Apply Lato font globally */
 body {
-  font-family: "Lato", sans-serif;
+  /* font-family: "Lato", sans-serif; */
+  font-family: "Teachers", sans-serif !important;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
   margin: 0;
   padding: 0;
 }
+
 /* Giscus Comment Section Container */
 #giscus {
-  margin-top: 40px;  /* Adds space above the comment section */
-  margin-bottom: 40px;  /* Adds space below the comment section */
-  padding: 20px;  /* Adds padding inside the container */
-  border-top: 1px solid #e0e0e0;  /* Light border at the top */
-  border-bottom: 1px solid #e0e0e0;  /* Light border at the bottom */
-  border-radius: 8px;  /* Rounded corners */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  /* Light shadow around the container */
+  margin-top: 40px;
+  /* Adds space above the comment section */
+  margin-bottom: 40px;
+  /* Adds space below the comment section */
+  padding: 20px;
+  /* Adds padding inside the container */
+  border-top: 1px solid #e0e0e0;
+  /* Light border at the top */
+  border-bottom: 1px solid #e0e0e0;
+  /* Light border at the bottom */
+  border-radius: 8px;
+  /* Rounded corners */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  /* Light shadow around the container */
 }
 
 /* Giscus Embed Custom Styling */
 .giscus {
-  font-family: "Roboto", sans-serif;  /* Use your desired font family */
-  background-color: #fff;  /* White background for the comments */
-  border-radius: 8px;  /* Rounded corners for the embedded iframe */
-  border: 1px solid #ddd;  /* Light border */
+  font-family: "Roboto", sans-serif;
+  /* Use your desired font family */
+  background-color: #fff;
+  /* White background for the comments */
+  border-radius: 8px;
+  /* Rounded corners for the embedded iframe */
+  border: 1px solid #ddd;
+  /* Light border */
 }
 
 /* Style for the iframe inside the Giscus widget */
 .giscus iframe {
-  border-radius: 8px;  /* Match the container's rounded corners */
+  border-radius: 8px;
+  /* Match the container's rounded corners */
 }
 
 /* Optional: Modify the height of the comment section */
 .giscus iframe {
-  height: 500px;  /* Adjust the height to fit your design */
-  width: 100%;  /* Make sure the iframe takes up the full width */
+  height: 500px;
+  /* Adjust the height to fit your design */
+  width: 100%;
+  /* Make sure the iframe takes up the full width */
 }
 
 /* Hover effect for the comment section */
 #giscus:hover {
-  background-color: #f0f0f0;  /* Change background color on hover */
+  background-color: #f0f0f0;
+  /* Change background color on hover */
 }
 
 /* Optional: Style the comment header */
@@ -55,7 +75,8 @@ body {
 
 .giscus-comment .author {
   font-weight: bold;
-  color: #007bff;  /* Use a link color for author name */
+  color: #007bff;
+  /* Use a link color for author name */
 }
 
 .giscus-comment .date {
@@ -63,20 +84,41 @@ body {
   color: #777;
 }
 
-.header{
+.headerContainer {
   display: flex;
   align-self: center;
   height: 60px;
-  padding: 0 16px;
-  border-bottom: 1px solid #e0e0e0;
   position: sticky;
   top: 0;
-  background: #fff;
+  justify-content: center;
+  background: #f9f9fa;
 }
-.header__item:first-child{
+
+.header {
+  display: flex;
+  align-self: center;
+  width: 1200px;
+  height: 100%;
+}
+
+.header__item:first-child {
   font-weight: 700;
+  font-size: 24px;
+  letter-spacing: 0.03em;
+  color: #46a758;
 }
-.header__item{
+
+.header__item:first-child a {
+  background: #8BC34A;
+  color: #fff;
+  padding: 0 12px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header__item {
   margin-right: 20px;
   font-size: 16px;
   color: #000;
@@ -84,17 +126,31 @@ body {
   align-items: center;
   text-decoration: none;
 }
-.header__item a{
+
+.header__item a {
   text-decoration: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
-.header__item a span{
+
+.header__item a span,
+.header__menu a,
+.header__menu a span {
   font-weight: 300;
   font-size: 16px;
+  text-transform: capitalize;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: #000;
+  font-weight: 500;
+  font-family: "Teachers", sans-serif !important;
 }
 
 /* Update OnePageBit styles */
 .onepagebit {
-  font-family: "Lato", sans-serif;
+  font-family: "Teachers", sans-serif;
   font-size: 1.2rem;
   color: #333;
   line-height: 1.8;
@@ -249,6 +305,7 @@ body {
 #jumper-container a:hover {
   text-decoration: underline;
 }
+
 /* Container for the whole page */
 .blog-container {
   display: flex;
@@ -267,13 +324,16 @@ body {
   font-size: 14px;
   border-left: 2px solid #46a758;
 }
-.section-jumper-container ul{
+
+.section-jumper-container ul {
   list-style: none;
 }
-.section-jumper-container ul a{
+
+.section-jumper-container ul a {
   color: #000;
   text-decoration: none;
 }
+
 .section-jumper {
   background: #fff;
   padding: 20px;
@@ -297,4 +357,48 @@ body {
 
 .jumper-item a:active {
   color: #003366;
+}
+
+.homepage__brand {
+  display: flex;
+  min-height: 200px;
+  align-items: center;
+  justify-content: center;
+  width: 768px;
+  flex-direction: column;
+  margin: 0 auto;
+  text-align: center;
+}
+.homepage__category{
+  margin: 0 auto;
+  margin-top: 60px;
+  display: flex;
+  width: 1200px;
+  flex-direction: row;
+  gap: 120px;
+  flex-wrap: wrap;    
+  justify-content: center;
+}
+.homepage__category__item{
+  max-width: 300px;
+}
+.homepage__category__item__body__intro{
+  font-size: 24px;
+  font-weight: 700;
+  margin: 16px 0;
+}
+.homepage__category__item__body__desc{
+  font-size: 14px;
+}
+.homepage__category__item__image{
+  border-radius: 12px;
+  overflow: hidden;
+}
+.homepage__category__item__image img{
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+}
+.homepage__footer{
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
 }

@@ -5,17 +5,18 @@ import matter from "gray-matter";
 import { useEffect } from "react";
 import MarkdownIt from "markdown-it";
 import SectionParser from '@/components/SectionJumper';
+import path from 'path';
+import getFileStructure from '@/lib/getContent'; // Import the helper function
 
 type Props = {
   content: string;
   meta: { title: string; date: string; category: string };
+  fileStructure: { [key: string]: string[] }; // Added fileStructure prop
 };
 
-export default function BlogPost({ content, meta }: Props) {
-  // Initialize MarkdownIt parser
+export default function BlogPost({ content, meta, fileStructure }: Props) {
   const md = new MarkdownIt();
 
-  // Load the Giscus script on mount
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://giscus.app/client.js';
@@ -38,27 +39,52 @@ export default function BlogPost({ content, meta }: Props) {
     script.setAttribute('crossorigin', 'anonymous');
     document.body.appendChild(script);
   });
-    // Generate the section jumper (table of contents)
-  
+
+  // Function to render the file structure as a sidebar
+  const renderMenu = (structure: { [key: string]: string[] }={}) => {
+    return Object.keys(structure).map((folder) => (
+      <div key={folder} className="menu-section">
+        <h3>{folder}</h3>
+        <ul>
+          {structure[folder].map((file) => (
+            <li key={file}>
+              <a href={`/category/${folder}/${file}`}>{file}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ));
+  };
+
   return (
     <div className="onepagebit">
-      <h1>{meta.title}</h1>
+      <h1>{meta?.title}</h1>
       <div className="blog-meta">
-        <span>📅 {meta.date}</span>
-        <span>📂 {meta.category}</span>
+        <span>📅 {meta?.date}</span>
+        <span>📂 {meta?.category}</span>
       </div>
       <hr />
-      
-      {/* Section Jumper - Table of Contents */}
-      <div className="section-jumper-container">
-        <SectionParser content={content} />
+
+      <div className="content-layout">
+        {/* Left Sidebar for the Menu */}
+        <div className="left-sidebar">
+          {renderMenu(fileStructure)}  {/* Render the file structure as menu */}
+        </div>
+
+        {/* Main Content Section */}
+        <div className="main-content">
+          {/* Section Jumper - Table of Contents */}
+          <div className="section-jumper-container">
+            <SectionParser content={content} />
+          </div>
+
+          {/* Blog Content */}
+          <div dangerouslySetInnerHTML={{ __html: content }} />
+
+          {/* Giscus comment section */}
+          <div id="giscus" className="giscus" />
+        </div>
       </div>
-
-      {/* Blog Content */}
-      <div dangerouslySetInnerHTML={{ __html: content }} />
-
-      {/* Giscus comment section */}
-      <div id="giscus" className="giscus"/>
     </div>
   );
 }
@@ -78,16 +104,34 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: false };
 };
 
-// ✅ Generate static props for each blog post
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  console.log("getStaticProps is being executed!");
+
+  // Remove these conditions for testing purposes:
   if (!params?.section || !params?.slug) return { notFound: true };
+
+  const contentPath = path.join(process.cwd(), 'content', 'category', params.section as string);
 
   const markdownContent = getMarkdownContent(
     params.slug as string,
     params.section as string
   );
   const { content, data } = matter(markdownContent); // Extract front matter
+  
+  const meta = {
+    title: data?.title || 'Default Title',
+    date: data?.date || 'Unknown Date',
+    category: data?.category || 'Uncategorized'
+  };
+
   const htmlContent = markdownToHtml(content);
-  const menu = getNestedFiles(); // Ensure this runs on the server
-  return { props: { content: htmlContent, meta: data, menu } };
+
+  const fileStructure = getFileStructure(contentPath);
+  console.log('File Structure:', fileStructure);
+
+  const menu = getNestedFiles();
+
+  return { props: { content: htmlContent, meta, menu, fileStructure } };
 };
+
+
