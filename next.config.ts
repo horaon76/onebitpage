@@ -4,7 +4,7 @@ const nextConfig = {
   reactStrictMode: true,
   output: "export",
   basePath: isProd ? "/onebitpage" : "",
-  assetPrefix: isProd ? "/onebitpage/" : "",
+  assetPrefix: "/public",
   images: { unoptimized: true },
   compiler: {
     styledComponents: true,
