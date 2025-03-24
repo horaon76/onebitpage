@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "rm -rf .next && chokidar 'content/**/*.md' -c 'npx ts-node scripts/generateContent.ts' & NEXT_DEV_CACHE=false next dev",
-    "prebuild": "npx ts-node scripts/generateContent.ts",
-    "build": "NEXT_DISABLE_ESLINT=1 next build --no-lint",
+    "build": "'npx ts-node scripts/generateContent.ts' & NEXT_DISABLE_ESLINT=1 next build --no-lint",
     "start": "next start",
     "lint": "next lint",
     "export": "next export"
