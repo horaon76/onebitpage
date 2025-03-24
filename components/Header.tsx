@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Box, Flex, Text } from "@radix-ui/themes";
-
+import { Menu } from "@ark-ui/react/menu";
+import { ChevronDown, Heart } from "lucide-react";
+import styles from "./header.module.css";
 type MenuProps = {
   menu: Record<string, any>;
 };
@@ -10,24 +11,34 @@ export default function Header({ menu }: MenuProps) {
     <header className="headerContainer">
       <div className="header">
         {/* Tab-based Navigation */}
-        <div className="header__item">
+        <div className="header__item header__item__brand">
           <Link key={"section1"} href={`/`} passHref>
             onebitpage
           </Link>
         </div>
-        {Object.keys(menu).map((section) => (
-          <div className="header__item">
-            <Link key={section} href={`/${section}`} passHref>
-              <Text
-                size="4"
-                weight="bold"
-                style={{ cursor: "pointer", padding: "8px 16px" }}
-              >
-                {section}
-              </Text>
-            </Link>
-          </div>
-        ))}
+        <Menu.Root>
+          <Menu.Trigger className={styles.menuButton}>
+            Topic <ChevronDown size={16} />
+          </Menu.Trigger>
+          <Menu.Positioner>
+            <Menu.Content className={styles.menuList}>
+              {Object.keys(menu).map((section) => (
+                <div className="header__item">
+                  <Menu.Item value="react" className={styles.menuItem}>
+                    <Link key={section} href={`/${menu[section]?.title}`} passHref>
+                        {menu[section]?.title}
+                    </Link>
+                  </Menu.Item>
+                </div>
+              ))}
+            </Menu.Content>
+          </Menu.Positioner>
+        </Menu.Root>
+        <div className="header__item">
+          <Link key={"section1"} href={`/cheatsheet`} passHref>
+            Cheat Sheet
+          </Link>
+        </div>
         <div
           className="header__item header__menu"
           style={{ marginLeft: "auto" }}
@@ -36,6 +47,7 @@ export default function Header({ menu }: MenuProps) {
             key={4}
             href={`https://github.com/horaon76/onebitpage`}
             passHref
+            target="_blank"
           >
             Contribute to Articles &nbsp;
             <svg

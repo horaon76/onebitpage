@@ -1,0 +1,143 @@
+[
+  {
+    "title": "Coding",
+    "order": 1,
+    "path": "Coding",
+    "breadcrumb": [
+      "Coding"
+    ],
+    "children": []
+  },
+  {
+    "title": "System Design",
+    "order": 2,
+    "path": "System Design",
+    "breadcrumb": [
+      "System Design"
+    ],
+    "children": []
+  },
+  {
+    "title": "Frontend",
+    "order": 3,
+    "path": "Frontend",
+    "breadcrumb": [
+      "Frontend"
+    ],
+    "children": []
+  },
+  {
+    "title": "Database",
+    "order": 4,
+    "path": "Database",
+    "breadcrumb": [
+      "Database"
+    ],
+    "children": [
+      {
+        "title": "Mysql",
+        "order": 9999,
+        "path": "Database",
+        "breadcrumb": [
+          "Database",
+          "Mysql"
+        ],
+        "children": [
+          {
+            "title": "Basic",
+            "order": 1,
+            "path": "Database/Mysql",
+            "breadcrumb": [
+              "Database",
+              "Mysql",
+              "Basic"
+            ],
+            "children": [
+              {
+                "slug": "Database/Mysql/Basic/Basic",
+                "title": "MySQL Scaling",
+                "shortTitle": "MySQL Scaling",
+                "intro": "",
+                "tags": [],
+                "date": "2025-03-23",
+                "category": "Database",
+                "order": 1,
+                "path": "Database/Mysql/Basic/Basic",
+                "breadcrumb": [
+                  "Database",
+                  "Mysql",
+                  "Basic",
+                  "Basic.md",
+                  "Basic"
+                ]
+              }
+            ]
+          },
+          {
+            "slug": "Database/Mysql/GettingStarted",
+            "title": "MySQL Scaling",
+            "shortTitle": "MySQL Scaling",
+            "intro": "",
+            "tags": [],
+            "date": "2025-03-23",
+            "category": "Database",
+            "order": 2,
+            "path": "Database/Mysql/GettingStarted",
+            "breadcrumb": [
+              "Database",
+              "Mysql",
+              "GettingStarted.md",
+              "GettingStarted"
+            ]
+          },
+          {
+            "slug": "Database/Mysql/Basic",
+            "title": "MySQL Scaling",
+            "shortTitle": "MySQL Scaling",
+            "intro": "",
+            "tags": [],
+            "date": "2025-03-23",
+            "category": "Database",
+            "order": 3,
+            "path": "Database/Mysql/Basic",
+            "breadcrumb": [
+              "Database",
+              "Mysql",
+              "Basic.md",
+              "Basic"
+            ]
+          },
+          {
+            "slug": "Database/Mysql/Advanced",
+            "title": "MySQL Scaling",
+            "shortTitle": "MySQL Scaling",
+            "intro": "hello",
+            "tags": [
+              "1",
+              "2"
+            ],
+            "date": "2025-03-23",
+            "category": "Database",
+            "order": 4,
+            "path": "Database/Mysql/Advanced",
+            "breadcrumb": [
+              "Database",
+              "Mysql",
+              "Advanced.md",
+              "Advanced"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Interview Experience",
+    "order": 5,
+    "path": "Interview Experience",
+    "breadcrumb": [
+      "Interview Experience"
+    ],
+    "children": []
+  }
+]

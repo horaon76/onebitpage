@@ -9,6 +9,7 @@ type Props = {
 };
 
 export default function SectionPage({ section, files }: Props) {
+  console.log("hello 2")
   return (
     <div>
       <h1>{section}</h1>
@@ -34,6 +35,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 // **Pre-generate props (sorted by date descending)**
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  console.log("hello 1")
   const section = params?.section as string;
   const files = getFilesInSection(section)
     .map(({ slug }) => {
@@ -44,5 +46,5 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); // Sort by date desc
 
     const menu = getNestedFiles(); // Ensure this runs on the server
-  return { props: { section, files, menu} };
+    return { props: { section, files, menu } }; // 🔥 Will refresh every second in dev mode
 };

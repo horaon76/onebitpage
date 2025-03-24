@@ -21,13 +21,21 @@ export const getSections = (): string[] => {
 };
 
 export const getFilesInSection = (section: string): { slug: string; title: string }[] => {
-  const sectionPath = path.join(CONTENT_DIR, section);
-  return fs.readdirSync(sectionPath)
-    .filter((file) => file.endsWith(".md"))
-    .map((file) => ({
-      slug: file.replace(".md", ""),
-      title: file.replace(".md", "").replace(/-/g, " "),
-    }));
+  let sectionPath = path.join(CONTENT_DIR, section);
+  sectionPath = sectionPath.toLowerCase();
+  const files = fs.readdirSync(sectionPath);
+  
+  console.log("sectionPath", sectionPath, files)
+  if (files.length === 0) {
+    return []; // 🚨 Return an empty array if no markdown files exist
+  }
+
+  const firstFile = files[0]; // 🔥 Pick the first markdown file
+
+  return [{
+    slug: firstFile.replace(".md", ""),
+    title: firstFile.replace(".md", "").replace(/-/g, " "),
+  }];
 };
 
 // Recursive function to get nested content structure

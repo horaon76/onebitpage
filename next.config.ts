@@ -11,7 +11,9 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  webpack: (config: { module: { rules: { test: RegExp; include: RegExp; type: string; }[]; }; }) => {
+  webpack: (config: {
+    module: { rules: { test: RegExp; include: RegExp; type: string }[] };
+  }) => {
     config.module.rules.push({
       test: /\.mjs$/,
       include: /node_modules/,

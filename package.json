@@ -2,18 +2,23 @@
   "name": "nextjs-github-pages",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "rm -rf .next && chokidar 'content/**/*.md' -c 'npx ts-node scripts/generateContent.ts' & NEXT_DEV_CACHE=false next dev",
+    "prebuild": "npx ts-node scripts/generateContent.ts",
     "build": "NEXT_DISABLE_ESLINT=1 next build --no-lint",
     "start": "next start",
     "lint": "next lint",
     "export": "next export"
   },
   "dependencies": {
+    "@ark-ui/react": "latest",
     "@radix-ui/themes": "3.2.1",
+    "@zag-js/utils": "1.5.0",
     "antd": "^5.24.4",
     "google": "^2.1.0",
     "gray-matter": "^4.0.3",
+    "lucide-react": "0.483.0",
     "markdown-it": "^14.1.0",
     "markdown-it-anchor": "9.2.0",
     "next": "^15.2.2",
@@ -37,7 +42,8 @@
     "eslint-config-next": "^15",
     "postcss": "^8",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "ts-node": "10.9.2",
+    "typescript": "5.8.2"
   },
   "eslintConfig": {
     "rules": {

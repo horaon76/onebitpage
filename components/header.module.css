@@ -1,0 +1,40 @@
+.menuButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 0px solid #ddd;
+    border-radius: 6px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .menuButton:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .menuList {
+    position: absolute;
+    margin-top: 8px;
+    width: 200px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 8px;
+  }
+  
+  .menuItem {
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .menuItem:hover {
+    background: #f1f1f1;
+  }
+  .menuItem a {
+    color: #000;
+    display: block;
+  }

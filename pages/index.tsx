@@ -1,13 +1,24 @@
-import { GetStaticProps } from "next";
 import Image from "next/image";
-import { getNestedFiles } from "@/lib/getContent";
+import fs from "fs";
+import path from "path";
 
-export const getStaticProps: GetStaticProps = async () => {
-  const menu = getNestedFiles(); // Ensure this runs on the server
-  return { props: { menu } };
-};
+export async function getStaticProps() {
+  let menu = {};
 
-export default function Home() {
+  try {
+    const filePath = path.join(process.cwd(), "public", "content.json");
+    const data = fs.readFileSync(filePath, "utf-8");
+    menu = JSON.parse(data);
+  } catch (err) {
+    console.error("Error loading menu:", err);
+  }
+
+  return {
+    props: { menu },
+  };
+}
+
+export default function Home({ menu }: { menu: any }) {
   return (
     <div className="homepage">
       <div className="homepage__brand">
@@ -18,14 +29,37 @@ export default function Home() {
           master key skills and succeed in your tech journey.
         </div>
       </div>
+
       <div className="homepage__category">
+
+        {/* // Coding */}
         <div className="homepage__category__item">
           <div className="homepage__category__item__image">
             <Image
-              src="/onebitpage/microservice.jpg" // Path to the image relative to the public folder
+              src="/onebitpage/ds.jpg"
+              alt="Coding"
+              width={300}
+              height={200}
+            />
+          </div>
+          <div className="homepage__category__item__body">
+            <div className="homepage__category__item__body__intro">
+              Coding
+            </div>
+            <div className="homepage__category__item__body__desc">
+            A hub for curated coding tips, tutorials, and best practices. Learn data structures, algorithms, and system design through concise, easy-to-follow guides. 🚀
+            </div>
+          </div>
+        </div>
+
+        {/* // Microservice */}
+        <div className="homepage__category__item">
+          <div className="homepage__category__item__image">
+            <Image
+              src="/onebitpage/microservice.jpg"
               alt="Microservice"
-              width={300} // Specify the width of the image
-              height={200} // Specify the height of the image
+              width={300}
+              height={200}
             />
           </div>
           <div className="homepage__category__item__body">
@@ -40,14 +74,15 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {/* //System Design/ */}
+
+        {/* // System Design */}
         <div className="homepage__category__item">
           <div className="homepage__category__item__image">
             <Image
-              src="/onebitpage/SystemDesign.jpg" // Path to the image relative to the public folder
+              src="/onebitpage/SystemDesign.jpg"
               alt="System Design"
-              width={300} // Specify the width of the image
-              height={200} // Specify the height of the image
+              width={300}
+              height={200}
             />
           </div>
           <div className="homepage__category__item__body">
@@ -62,14 +97,15 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {/* //FE/ */}
+
+        {/* // Frontend Engineering */}
         <div className="homepage__category__item">
           <div className="homepage__category__item__image">
             <Image
-              src="/onebitpage/FE.jpg" // Path to the image relative to the public folder
+              src="/onebitpage/FE.jpg"
               alt="Frontend Engineering"
-              width={300} // Specify the width of the image
-              height={200} // Specify the height of the image
+              width={300}
+              height={200}
             />
           </div>
           <div className="homepage__category__item__body">
@@ -83,14 +119,15 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {/* //Database/ */}
+
+        {/* // Database */}
         <div className="homepage__category__item">
           <div className="homepage__category__item__image">
             <Image
-              src="/onebitpage/DB.jpg" // Path to the image relative to the public folder
+              src="/onebitpage/DB.jpg"
               alt="Database"
-              width={300} // Specify the width of the image
-              height={200} // Specify the height of the image
+              width={300}
+              height={200}
             />
           </div>
           <div className="homepage__category__item__body">
@@ -104,14 +141,15 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {/* //Interview Experience/ */}
+
+        {/* // Interview Experience */}
         <div className="homepage__category__item">
           <div className="homepage__category__item__image">
             <Image
-              src="/onebitpage/office.jpg" // Path to the image relative to the public folder
+              src="/onebitpage/office.jpg"
               alt="Interview Experience"
-              width={300} // Specify the width of the image
-              height={200} // Specify the height of the image
+              width={300}
+              height={200}
             />
           </div>
           <div className="homepage__category__item__body">
@@ -126,6 +164,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+
       <div className="homepage__footer">
         <p></p>
       </div>
