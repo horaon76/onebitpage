@@ -6,7 +6,6 @@ import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  console.log("pageProps", pageProps);
   return (
     <Theme accentColor="green">
       <Header menu={pageProps.menu || {}} />

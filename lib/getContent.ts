@@ -25,7 +25,6 @@ export const getFilesInSection = (section: string): { slug: string; title: strin
   sectionPath = sectionPath.toLowerCase();
   const files = fs.readdirSync(sectionPath);
   
-  console.log("sectionPath", sectionPath, files)
   if (files.length === 0) {
     return []; // 🚨 Return an empty array if no markdown files exist
   }
@@ -100,7 +99,6 @@ const getFileStructure = (basePath: string) => {
       }
     }
   });
-  console.log("Markdown front matter:", structure);
   return structure;
 };
 
