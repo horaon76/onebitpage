@@ -22,7 +22,7 @@ export default function Home() {
         <div className="homepage__category__item">
           <div className="homepage__category__item__image">
             <Image
-              src="/microservice.jpg" // Path to the image relative to the public folder
+              src="/onebitpage/microservice.jpg" // Path to the image relative to the public folder
               alt="Microservice"
               width={300} // Specify the width of the image
               height={200} // Specify the height of the image
@@ -44,7 +44,7 @@ export default function Home() {
         <div className="homepage__category__item">
           <div className="homepage__category__item__image">
             <Image
-              src="/SystemDesign.jpg" // Path to the image relative to the public folder
+              src="/onebitpage/SystemDesign.jpg" // Path to the image relative to the public folder
               alt="System Design"
               width={300} // Specify the width of the image
               height={200} // Specify the height of the image
@@ -66,7 +66,7 @@ export default function Home() {
         <div className="homepage__category__item">
           <div className="homepage__category__item__image">
             <Image
-              src="/FE.jpg" // Path to the image relative to the public folder
+              src="/onebitpage/FE.jpg" // Path to the image relative to the public folder
               alt="Frontend Engineering"
               width={300} // Specify the width of the image
               height={200} // Specify the height of the image
@@ -87,7 +87,7 @@ export default function Home() {
         <div className="homepage__category__item">
           <div className="homepage__category__item__image">
             <Image
-              src="/DB.jpg" // Path to the image relative to the public folder
+              src="/onebitpage/DB.jpg" // Path to the image relative to the public folder
               alt="Database"
               width={300} // Specify the width of the image
               height={200} // Specify the height of the image
@@ -108,7 +108,7 @@ export default function Home() {
         <div className="homepage__category__item">
           <div className="homepage__category__item__image">
             <Image
-              src="/office.jpg" // Path to the image relative to the public folder
+              src="/onebitpage/office.jpg" // Path to the image relative to the public folder
               alt="Interview Experience"
               width={300} // Specify the width of the image
               height={200} // Specify the height of the image
@@ -127,7 +127,7 @@ export default function Home() {
         </div>
       </div>
       <div className="homepage__footer">
-        <p>Made with ❤️ in Bengaluru, India</p>
+        <p></p>
       </div>
     </div>
   );
