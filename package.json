@@ -2,7 +2,6 @@
   "name": "nextjs-github-pages",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "rm -rf .next && chokidar 'content/**/*.md' -c 'npx ts-node scripts/generateContent.ts' & NEXT_DEV_CACHE=false next dev",
     "build": "'npx ts-node scripts/generateContent.ts' & NEXT_DISABLE_ESLINT=1 next build --no-lint",
