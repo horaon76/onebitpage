@@ -1,11 +1,4 @@
-import { GetStaticProps, GetStaticPaths } from "next";
-import { getSections, getFilesInSection, getMarkdownContent, getFileStructure } from "@/lib/getContent";
-import { markdownToHtml } from "@/lib/markdownToHtml";
-import matter from "gray-matter";
-import path from "path";
-import fs from "fs";
 import * as Accordion from "@radix-ui/react-accordion";
-import SectionParser from "@/components/SectionJumper";
 
 type Props = {
   content: string;
@@ -56,47 +49,3 @@ export default function BlogPost({ content, meta, fileStructure }: Props) {
   );
 }
 
-// // ✅ Generate static paths for all markdown files
-// export const getStaticPaths: GetStaticPaths = async () => {
-//   const sections = getSections(); // Example: ["Database", "system-design"]
-//   const paths = sections.flatMap((section) =>
-//     getFilesInSection(section).map((file) => ({
-//       params: {
-//         section: section.toLowerCase(),  // 🔥 Convert to lowercase
-//         slug: file.slug.toLowerCase(),  // 🔥 Convert to lowercase
-//       },
-//     }))
-//   );
-
-//   console.log("✅ Generated Paths:", paths, sections);
-//   return { paths, fallback: false };
-// };
-
-
-// // ✅ Generate static props (runs only at build time)
-// export const getStaticProps: GetStaticProps = async ({ params }) => {
-//   if (!params?.section || !params?.slug) {
-//     return { notFound: true };
-//   }
-
-//   const contentPath = path.join(process.cwd(), "content", "category", params.section as string, `${params.slug}.md`);
-  
-//   if (!fs.existsSync(contentPath)) {
-//     return { notFound: true };
-//   }
-
-//   const fileContent = fs.readFileSync(contentPath, "utf-8");
-//   const { content, data } = matter(fileContent);
-//   const htmlContent = markdownToHtml(content);
-
-//   const meta = {
-//     title: data?.title || "Default Title",
-//     date: data?.date || "Unknown Date",
-//     category: data?.category || "Uncategorized",
-//   };
-
-//   const fileStructure = getFileStructure(path.join(process.cwd(), "content", "category"));
-
-//   console.log("hello", fileStructure)
-//   return { props: { content: htmlContent, meta, fileStructure } };
-// };
