@@ -7,9 +7,7 @@ import { Popover } from "@ark-ui/react/popover";
 import { ChevronRightIcon } from "lucide-react";
 
 const musicFiles = [
-  "/onebitpage/shooterbg1.mp3",
-  "/onebitpage/shooterbg2.mp3",
-  "/onebitpage/shooterbg3.mp3",
+  "/onebitpage/shooterbg1.mp3"
 ];
 
 const ShooterGame: React.FC = () => {
