@@ -1,14 +1,200 @@
 import React, { useEffect, useRef, useState } from "react";
-import FighterPlane from "../../public/jet-plane.png";
 import { RatingGroup } from "@ark-ui/react/rating-group";
 import { StarIcon } from "lucide-react";
 import { Volume2, VolumeX } from "lucide-react";
 import { Popover } from "@ark-ui/react/popover";
-import { ChevronRightIcon } from "lucide-react";
 
-const musicFiles = [
-  "/onebitpage/shooterbg1.mp3"
-];
+const musicFiles = ["/onebitpage/shooterbg1.mp3"];
+const planeOptions = [1, 2, 3].map(
+  (num) => `/onebitpage/shooterGame/jet-plane${num}.png`
+);
+const balloonOptions = [1, 2, 3].map((num) => ({
+  src: `/onebitpage/shooterGame/baloon${num}.png`,
+  points: num,
+}));
+
+function playBeep() {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioCtx.createOscillator();
+  oscillator.type = "sine"; // Try "square", "triangle", or "sawtooth" for different sounds
+  oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // Frequency in Hz (440 Hz = "A" note)
+
+  const gainNode = audioCtx.createGain();
+  gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Adjust volume
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  oscillator.start();
+  oscillator.stop(audioCtx.currentTime + 0.1); // Play for 0.1 seconds
+}
+
+function playShootSound() {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioCtx.createOscillator();
+  const gainNode = audioCtx.createGain();
+
+  oscillator.type = "triangle"; // Softer laser sound
+  oscillator.frequency.setValueAtTime(1500, audioCtx.currentTime); // Start high
+  oscillator.frequency.exponentialRampToValueAtTime(
+    200,
+    audioCtx.currentTime + 0.1
+  ); // Drops down
+
+  gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Lower volume
+  gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1); // Fade out
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  oscillator.start();
+  oscillator.stop(audioCtx.currentTime + 0.15); // Short burst
+}
+
+function playVictoryMelody() {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  function playNote(frequency, startTime, duration, gainValue = 0.05) {
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    osc.type = "sawtooth"; // Sawtooth wave for a brighter brass-like sound
+    osc.frequency.setValueAtTime(frequency, audioCtx.currentTime + startTime);
+    gainNode.gain.setValueAtTime(gainValue, audioCtx.currentTime + startTime);
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.01,
+      audioCtx.currentTime + startTime + duration
+    );
+
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    osc.start(audioCtx.currentTime + startTime);
+    osc.stop(audioCtx.currentTime + startTime + duration);
+  }
+
+  // Melody: "Da Da Da Daaa!"
+  playNote(523, 0.0, 0.3); // C5
+  playNote(659, 0.3, 0.3); // E5
+  playNote(784, 0.6, 0.3); // G5
+  playNote(880, 1.0, 0.5); // A5 (longer last note)
+}
+
+function playGameOverSound() {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  function playBoom(frequency, startTime, duration, gainValue = 1) {
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    osc.type = "square"; // Deep and powerful
+    osc.frequency.setValueAtTime(frequency, audioCtx.currentTime + startTime);
+    gainNode.gain.setValueAtTime(gainValue, audioCtx.currentTime + startTime);
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.01,
+      audioCtx.currentTime + startTime + duration
+    );
+
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    osc.start(audioCtx.currentTime + startTime);
+    osc.stop(audioCtx.currentTime + startTime + duration);
+  }
+
+  function playSplash(startTime) {
+    const whiteNoise = audioCtx.createBufferSource();
+    const bufferSize = audioCtx.sampleRate * 0.5; // 0.5 seconds of noise
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const output = buffer.getChannelData(0);
+
+    for (let i = 0; i < bufferSize; i++) {
+      output[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize); // White noise fade-out
+    }
+
+    whiteNoise.buffer = buffer;
+    const gainNode = audioCtx.createGain();
+    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime + startTime);
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.01,
+      audioCtx.currentTime + startTime + 0.5
+    );
+
+    whiteNoise.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    whiteNoise.start(audioCtx.currentTime + startTime);
+  }
+
+  // BOOM + SPLASH effect
+  //   playBoom(80, 0.0, 1.0, 2); // Deep BOOM (bass)
+  playSplash(0.3); // Splashy white noise
+}
+
+const ManhattanShadow = () => {
+    const canvasRef = useRef(null);
+  
+    useEffect(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+  
+      // Full width & 30% height of window
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight * 0.3;
+  
+      function drawManhattanShadow() {
+        const buildings = [];
+        const totalWidth = canvas.width;
+        let x = 0;
+  
+        // Create buildings with varying width and height
+        while (x < totalWidth) {
+          let width = Math.random() * 50 + 40; // 40 to 90 px
+          let height = Math.random() * (canvas.height * 0.7) + canvas.height * 0.3; // 30% to 100% of skyline
+  
+          buildings.push({ x, width, height });
+          x += width + 10; // Small gap between buildings
+        }
+  
+        // Draw buildings
+        ctx.fillStyle = "black";
+        buildings.forEach((building) => {
+          ctx.fillRect(building.x, canvas.height - building.height, building.width, building.height);
+  
+          // Draw windows (small yellow squares)
+          ctx.fillStyle = "yellow";
+          for (let wx = building.x + 5; wx < building.x + building.width - 5; wx += 10) {
+            for (let wy = canvas.height - building.height + 5; wy < canvas.height - 10; wy += 15) {
+              if (Math.random() > 0.3) {
+                ctx.fillRect(wx, wy, 5, 5); // Small square windows
+              }
+            }
+          }
+          ctx.fillStyle = "black"; // Reset fill color for next building
+        });
+  
+        // Add a fading shadow effect
+        const gradient = ctx.createLinearGradient(0, canvas.height - 20, 0, canvas.height);
+        gradient.addColorStop(0, "rgba(254, 254, 254, 0.8)");
+        gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+      }
+  
+      drawManhattanShadow();
+    }, []);
+  
+    return (
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute",
+          bottom: "0",
+          left: "0",
+          width: "100%",
+          background: "transparent",
+        }}
+      />
+    );
+  };
 
 const ShooterGame: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -16,7 +202,7 @@ const ShooterGame: React.FC = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [level, setLevel] = useState(1);
   const [score, setScore] = useState(0);
-  const [maxScore, setMaxScore] = useState(10); // Max score per level
+  const [maxScore, setMaxScore] = useState(10);
   const [lives, setLives] = useState(3);
   const [velocity, setVelocity] = useState(2);
   const [highestScore, setHighestScore] = useState(0);
@@ -24,27 +210,33 @@ const ShooterGame: React.FC = () => {
   const [gameOver, setGameOver] = useState(false);
   const [levelCompleted, setLevelCompleted] = useState(false);
   const [selectedMusic, setSelectedMusic] = useState<string>("");
+  const [selectedPlane, setSelectedPlane] = useState(planeOptions[0]); // Default plane
 
   const fighterImgRef = useRef<HTMLImageElement | null>(null);
   const animationRef = useRef<number | null>(null);
   const projectiles = useRef<{ x: number; y: number; radius: number }[]>([]);
   const enemies = useRef<
-    { x: number; y: number; radius: number; speed: number; color: string }[]
+    {
+      x: number;
+      y: number;
+      image: HTMLImageElement;
+      points: number;
+      speed: number;
+    }[]
   >([]);
   const player = useRef({ x: 0, y: 0, width: 50, height: 50 });
 
+  const random = (min: number, max: number) =>
+    Math.random() * (max - min) + min;
+
   // 🎵 Load background music once
   useEffect(() => {
-    // Pick a random music file
     const randomMusic =
       musicFiles[Math.floor(Math.random() * musicFiles.length)];
     setSelectedMusic(randomMusic);
-
-    if (!bgMusicRef.current) {
-      bgMusicRef.current = new Audio(randomMusic);
-      bgMusicRef.current.loop = true;
-      bgMusicRef.current.volume = 0.5;
-    }
+    bgMusicRef.current = new Audio(randomMusic);
+    bgMusicRef.current.loop = true;
+    bgMusicRef.current.volume = 0.5;
   }, []);
 
   useEffect(() => {
@@ -55,9 +247,9 @@ const ShooterGame: React.FC = () => {
   useEffect(() => {
     if (!gameStarted || gameOver || levelCompleted) return;
 
-    const img = new Image();
-    img.src = FighterPlane.src;
-    img.onload = () => (fighterImgRef.current = img);
+    const planeImg = new Image();
+    planeImg.src = selectedPlane;
+    planeImg.onload = () => (fighterImgRef.current = planeImg);
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -68,22 +260,26 @@ const ShooterGame: React.FC = () => {
     canvas.height = 600;
     player.current.x = canvas.width / 2;
     player.current.y = canvas.height - 60;
-
     const spawnEnemies = setInterval(() => {
       if (!gameStarted || gameOver || levelCompleted) return;
       const x = Math.random() * canvas.width;
-      enemies.current.push({
-        x,
-        y: 0,
-        radius: 15,
-        speed: velocity,
-        color: "#FF6600",
-      });
+      const balloonType =
+        balloonOptions[Math.floor(Math.random() * balloonOptions.length)];
+      const enemyImg = new Image();
+      enemyImg.src = balloonType.src;
+      enemyImg.onload = () => {
+        enemies.current.push({
+          x,
+          y: 0,
+          image: enemyImg,
+          points: balloonType.points,
+          speed: velocity,
+        });
+      };
     }, 1000);
 
     const animate = () => {
       if (gameOver || levelCompleted) return;
-
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (fighterImgRef.current) {
@@ -98,7 +294,7 @@ const ShooterGame: React.FC = () => {
 
       projectiles.current.forEach((p) => {
         p.y -= 8;
-        ctx.fillStyle = "#FFEB00";
+        ctx.fillStyle = "red";
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fill();
@@ -106,25 +302,24 @@ const ShooterGame: React.FC = () => {
 
       enemies.current.forEach((e) => {
         e.y += e.speed;
-        ctx.fillStyle = e.color;
-        ctx.beginPath();
-        ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.drawImage(e.image, e.x - 20, e.y, 40, 40);
       });
 
       // Check collisions
       projectiles.current = projectiles.current.filter((p) => {
         return !enemies.current.some((e, eIndex) => {
           const dist = Math.hypot(p.x - e.x, p.y - e.y);
-          if (dist < e.radius + p.radius) {
+          if (dist < 20 + p.radius) {
             setScore((prevScore) => {
-              const newScore = prevScore + 1;
+              const newScore = prevScore + e.points;
               if (newScore >= maxScore) {
+                playVictoryMelody();
                 setLevelCompleted(true);
               }
               return newScore;
             });
             enemies.current.splice(eIndex, 1);
+            playBeep();
             return true;
           }
           return false;
@@ -135,6 +330,7 @@ const ShooterGame: React.FC = () => {
         if (e.y > canvas.height) {
           setLives((prev) => {
             if (prev - 1 <= 0) {
+              playGameOverSound();
               setGameOver(true);
               return 0;
             }
@@ -149,12 +345,11 @@ const ShooterGame: React.FC = () => {
     };
 
     animationRef.current = requestAnimationFrame(animate);
-
     return () => {
       clearInterval(spawnEnemies);
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
-  }, [gameStarted, velocity, gameOver, levelCompleted]);
+  }, [gameStarted, velocity, gameOver, levelCompleted, selectedPlane]);
 
   const restartGame = () => {
     setGameStarted(false);
@@ -172,7 +367,7 @@ const ShooterGame: React.FC = () => {
     setLevel((prev) => prev + 1);
     setScore(0);
     setMaxScore(maxScore + 5); // Increase max score for next level
-    setVelocity(velocity + 1); // Increase enemy speed
+    setVelocity(velocity + 0.3); // Increase enemy speed
     setLevelCompleted(false);
     enemies.current = [];
     projectiles.current = [];
@@ -182,9 +377,7 @@ const ShooterGame: React.FC = () => {
     <div className="onebitpage-shootergame">
       <div className="onebitpage-shootergame__name">
         <RatingGroup.Root count={5} defaultValue={3}>
-          <RatingGroup.Label>
-                1Bit-Shooter (Single - Player)
-            </RatingGroup.Label>
+          <RatingGroup.Label>1Bit-Shooter (Single - Player)</RatingGroup.Label>
           <RatingGroup.Control>
             <RatingGroup.Context>
               {({ items }) =>
@@ -204,7 +397,17 @@ const ShooterGame: React.FC = () => {
         </RatingGroup.Root>
       </div>
       <div className="onebitpage-shootergame__gamecontainer">
-        <div className="game-info lives">Lives: {lives}</div>
+        <div className="game-info lives">
+          Lives:{" "}
+          {Array.from({ length: lives }).map((_, index) => (
+            <span
+              key={index}
+              style={{ color: "red", fontSize: "12px", margin: "0 2px" }}
+            >
+              ❤️
+            </span>
+          ))}
+        </div>
         <div className="game-info audio">
           {/* 🎵 Mute/Unmute Button */}
           <button
@@ -224,65 +427,86 @@ const ShooterGame: React.FC = () => {
             }}
           >
             {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-            {isMuted ? "Unmute" : "Mute"}
           </button>
         </div>
         <div className="game-info score">
           Score: {score} / {maxScore} | Level: {level}
         </div>
-        {!gameStarted && !gameOver && !levelCompleted && (
-          <div className="game-message">
-            <h1>Press Start to Play</h1>
-            <button
-              onClick={() => {
-                setGameStarted(true);
-                if (bgMusicRef.current) {
-                  bgMusicRef.current.src = selectedMusic; // Set the random track
-                  bgMusicRef.current
-                    .play()
-                    .catch((err) => console.log("Music blocked:", err));
-                }
-              }}
-            >
-              Start Game
-            </button>
+        {!gameStarted && (
+          <div className="game-menu game-message">
+            <h1>Select Your Plane</h1>
+            <div className="plane-selection">
+              {planeOptions.map((plane) => (
+                <img
+                  key={plane}
+                  src={plane}
+                  alt="Plane"
+                  className={`plane-option ${
+                    selectedPlane === plane ? "selected" : ""
+                  }`}
+                  onClick={() => setSelectedPlane(plane)}
+                  style={{
+                    width: "80px",
+                    cursor: "pointer",
+                    border: selectedPlane === plane ? "2px solid #000" : "none",
+                  }}
+                />
+              ))}
+            </div>
+            <button onClick={() => setGameStarted(true)}>Start Game</button>
           </div>
         )}
-        <canvas
-          ref={canvasRef}
-          className="game-canvas"
-          onMouseMove={(e) => {
-            if (gameOver || levelCompleted) return;
-            const rect = canvasRef.current?.getBoundingClientRect();
-            if (rect) {
-              player.current.x = e.clientX - rect.left;
-            }
+        <div
+          style={{
+            border: "3px solid red",
+            borderRadius: "10px",
+            boxShadow: "0px 0px 10px rgba(255, 255, 255, 0.5)",
           }}
-          onClick={() => {
-            if (gameOver || levelCompleted) return;
-            projectiles.current.push({
-              x: player.current.x,
-              y: player.current.y,
-              radius: 5,
-            });
-          }}
-        ></canvas>
+        >
+          {gameStarted && (
+            <>
+              <canvas
+                ref={canvasRef}
+                onMouseMove={(e) => {
+                  const rect = canvasRef.current?.getBoundingClientRect();
+                  if (rect) player.current.x = e.clientX - rect.left;
+                }}
+                onClick={() => {
+                  playShootSound();
+                  projectiles.current.push({
+                    x: player.current.x,
+                    y: player.current.y,
+                    radius: 5,
+                  });
+                }}
+              />{" "}
+              {/* <ManhattanShadow /> */}
+            </>
+          )}
+        </div>
+
         {gameOver && (
           <div className="game-message">
-            <h1>Game Over!</h1>
-            <button onClick={restartGame}>Restart Game</button>
+            <h2>Game Over!</h2>
+            <button onClick={restartGame}>Restart</button>
           </div>
         )}
         {levelCompleted && (
           <div className="game-message">
-            <h1>Level {level} Completed!</h1>
+            <h2>Level {level} Completed!</h2>
             <button onClick={startNextLevel}>Start Level {level + 1}</button>
           </div>
         )}
-      </div>{" "}
+      </div>
       <div className="onebitpage-shootergame__intro">
-        <p>Music & Code by : <a href="https://www.linkedin.com/in/harishoraon/" target="_blank">Harish Oraon</a></p>
-        <br /><br />
+        <p>
+          Music & Code by :{" "}
+          <a href="https://www.linkedin.com/in/harishoraon/" target="_blank">
+            Harish Oraon
+          </a>
+        </p>
+        <br />
+        <br />
         <p>
           1Bit Shooter is an action-packed arcade-style shooting game where you
           control a fighter jet to take down incoming enemies. Navigate your
