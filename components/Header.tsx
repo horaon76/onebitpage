@@ -39,6 +39,11 @@ export default function Header({ menu }: MenuProps) {
             Cheat Sheet
           </Link>
         </div>
+        <div className="header__item">
+          <Link key={"section1"} href={`/games`} passHref>
+            HTML5 Games
+          </Link>
+        </div>
         <div
           className="header__item header__menu"
           style={{ marginLeft: "auto" }}

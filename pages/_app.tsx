@@ -2,6 +2,7 @@ import type { AppProps } from "next/app";
 import Header from "@/components/Header";
 
 import "@/styles/global.css";
+import "@/styles/ShooterGame.module.css";
 import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
 
