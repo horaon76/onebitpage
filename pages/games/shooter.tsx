@@ -2,11 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import FighterPlane from "../../public/jet-plane.png";
 import { RatingGroup } from "@ark-ui/react/rating-group";
 import { StarIcon } from "lucide-react";
+import { Volume2, VolumeX } from "lucide-react";
 import { Popover } from "@ark-ui/react/popover";
 import { ChevronRightIcon } from "lucide-react";
 
+const musicFiles = [
+  "/onebitpage/shooterbg1.mp3",
+  "/onebitpage/shooterbg2.mp3",
+  "/onebitpage/shooterbg3.mp3",
+];
+
 const ShooterGame: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const bgMusicRef = useRef<HTMLAudioElement | null>(null);
+  const [isMuted, setIsMuted] = useState(false);
   const [level, setLevel] = useState(1);
   const [score, setScore] = useState(0);
   const [maxScore, setMaxScore] = useState(10); // Max score per level
@@ -16,6 +25,7 @@ const ShooterGame: React.FC = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [levelCompleted, setLevelCompleted] = useState(false);
+  const [selectedMusic, setSelectedMusic] = useState<string>("");
 
   const fighterImgRef = useRef<HTMLImageElement | null>(null);
   const animationRef = useRef<number | null>(null);
@@ -24,6 +34,20 @@ const ShooterGame: React.FC = () => {
     { x: number; y: number; radius: number; speed: number; color: string }[]
   >([]);
   const player = useRef({ x: 0, y: 0, width: 50, height: 50 });
+
+  // 🎵 Load background music once
+  useEffect(() => {
+    // Pick a random music file
+    const randomMusic =
+      musicFiles[Math.floor(Math.random() * musicFiles.length)];
+    setSelectedMusic(randomMusic);
+
+    if (!bgMusicRef.current) {
+      bgMusicRef.current = new Audio(randomMusic);
+      bgMusicRef.current.loop = true;
+      bgMusicRef.current.volume = 0.5;
+    }
+  }, []);
 
   useEffect(() => {
     const storedScore = Number(localStorage.getItem("highestScore")) || 0;
@@ -181,13 +205,47 @@ const ShooterGame: React.FC = () => {
       </div>
       <div className="onebitpage-shootergame__gamecontainer">
         <div className="game-info lives">Lives: {lives}</div>
+        <div className="game-info audio">
+          {/* 🎵 Mute/Unmute Button */}
+          <button
+            onClick={() => {
+              if (bgMusicRef.current) {
+                setIsMuted(!isMuted);
+                bgMusicRef.current.muted = !bgMusicRef.current.muted;
+              }
+            }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "8px",
+              fontSize: "16px",
+              cursor: "pointer",
+            }}
+          >
+            {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+            {isMuted ? "Unmute" : "Mute"}
+          </button>
+        </div>
         <div className="game-info score">
           Score: {score} / {maxScore} | Level: {level}
         </div>
         {!gameStarted && !gameOver && !levelCompleted && (
           <div className="game-message">
             <h1>Press Start to Play</h1>
-            <button onClick={() => setGameStarted(true)}>Start Game</button>
+            <button
+              onClick={() => {
+                setGameStarted(true);
+                if (bgMusicRef.current) {
+                  bgMusicRef.current.src = selectedMusic; // Set the random track
+                  bgMusicRef.current
+                    .play()
+                    .catch((err) => console.log("Music blocked:", err));
+                }
+              }}
+            >
+              Start Game
+            </button>
           </div>
         )}
         <canvas

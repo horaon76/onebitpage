@@ -823,6 +823,10 @@ p {
   top: 10px;
   left: 10px;
 }
+.audio {
+  top: 4px;
+  left: 80px;
+}
 
 .score {
   top: 10px;
