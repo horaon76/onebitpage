@@ -93,15 +93,15 @@ const ShooterGame: React.FC = () => {
       // Check collisions
       projectiles.current = projectiles.current.filter((p) => {
         return !enemies.current.some((e, eIndex) => {
-          if (gameOver || levelCompleted) return true;
           const dist = Math.hypot(p.x - e.x, p.y - e.y);
           if (dist < e.radius + p.radius) {
-            const newScore = score + 1;
-            setScore(newScore);
-            if (newScore >= maxScore) {
-              setLevelCompleted(true);
-              return true;
-            }
+            setScore((prevScore) => {
+              const newScore = prevScore + 1;
+              if (newScore >= maxScore) {
+                setLevelCompleted(true);
+              }
+              return newScore;
+            });
             enemies.current.splice(eIndex, 1);
             return true;
           }
