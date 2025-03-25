@@ -13,54 +13,72 @@ const balloonOptions = [1, 2, 3].map((num) => ({
   points: num,
 }));
 
-function playBeep() {
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const oscillator = audioCtx.createOscillator();
-  oscillator.type = "sine"; // Try "square", "triangle", or "sawtooth" for different sounds
-  oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // Frequency in Hz (440 Hz = "A" note)
+// Global AudioContext to prevent multiple instances
+let audioCtx;
 
+if (typeof window !== "undefined") {
+  audioCtx = new (window.AudioContext || window?.['webkitAudioContext'])();
+}
+
+function ensureAudioContext() {
+  if (audioCtx && audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+}
+
+// ✅ Simple Beep Sound
+function playBeep() {
+  ensureAudioContext();
+
+  const oscillator = audioCtx.createOscillator();
   const gainNode = audioCtx.createGain();
-  gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Adjust volume
+
+  oscillator.type = "sine";
+  oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // "A" note
+  gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Volume
 
   oscillator.connect(gainNode);
   gainNode.connect(audioCtx.destination);
 
   oscillator.start();
-  oscillator.stop(audioCtx.currentTime + 0.1); // Play for 0.1 seconds
+  oscillator.stop(audioCtx.currentTime + 0.1);
 }
 
+// ✅ Shooting Sound (Laser Effect)
 function playShootSound() {
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  ensureAudioContext();
+
   const oscillator = audioCtx.createOscillator();
   const gainNode = audioCtx.createGain();
 
-  oscillator.type = "triangle"; // Softer laser sound
-  oscillator.frequency.setValueAtTime(1500, audioCtx.currentTime); // Start high
+  oscillator.type = "triangle";
+  oscillator.frequency.setValueAtTime(1500, audioCtx.currentTime);
   oscillator.frequency.exponentialRampToValueAtTime(
     200,
     audioCtx.currentTime + 0.1
-  ); // Drops down
+  );
 
-  gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Lower volume
-  gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1); // Fade out
+  gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
 
   oscillator.connect(gainNode);
   gainNode.connect(audioCtx.destination);
 
   oscillator.start();
-  oscillator.stop(audioCtx.currentTime + 0.15); // Short burst
+  oscillator.stop(audioCtx.currentTime + 0.15);
 }
 
+// ✅ Victory Melody 🎺🎶 (Trumpet-Like)
 function playVictoryMelody() {
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  ensureAudioContext();
 
-  function playNote(frequency, startTime, duration, gainValue = 0.05) {
+  function playNote(frequency, startTime, duration) {
     const osc = audioCtx.createOscillator();
     const gainNode = audioCtx.createGain();
 
-    osc.type = "sawtooth"; // Sawtooth wave for a brighter brass-like sound
+    osc.type = "sawtooth"; // Brighter sound
     osc.frequency.setValueAtTime(frequency, audioCtx.currentTime + startTime);
-    gainNode.gain.setValueAtTime(gainValue, audioCtx.currentTime + startTime);
+    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime + startTime);
     gainNode.gain.exponentialRampToValueAtTime(
       0.01,
       audioCtx.currentTime + startTime + duration
@@ -72,23 +90,24 @@ function playVictoryMelody() {
     osc.stop(audioCtx.currentTime + startTime + duration);
   }
 
-  // Melody: "Da Da Da Daaa!"
+  // Da Da Da Daaa! 🎺
   playNote(523, 0.0, 0.3); // C5
   playNote(659, 0.3, 0.3); // E5
   playNote(784, 0.6, 0.3); // G5
-  playNote(880, 1.0, 0.5); // A5 (longer last note)
+  playNote(880, 1.0, 0.5); // A5 (final note)
 }
 
+// ✅ Game Over Sound 💥 (Boom + Splash)
 function playGameOverSound() {
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  ensureAudioContext();
 
-  function playBoom(frequency, startTime, duration, gainValue = 1) {
+  function playBoom(frequency, startTime, duration) {
     const osc = audioCtx.createOscillator();
     const gainNode = audioCtx.createGain();
 
-    osc.type = "square"; // Deep and powerful
+    osc.type = "square"; // Heavy sound
     osc.frequency.setValueAtTime(frequency, audioCtx.currentTime + startTime);
-    gainNode.gain.setValueAtTime(gainValue, audioCtx.currentTime + startTime);
+    gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime + startTime);
     gainNode.gain.exponentialRampToValueAtTime(
       0.01,
       audioCtx.currentTime + startTime + duration
@@ -102,12 +121,12 @@ function playGameOverSound() {
 
   function playSplash(startTime) {
     const whiteNoise = audioCtx.createBufferSource();
-    const bufferSize = audioCtx.sampleRate * 0.5; // 0.5 seconds of noise
+    const bufferSize = audioCtx.sampleRate * 0.5;
     const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
     const output = buffer.getChannelData(0);
 
     for (let i = 0; i < bufferSize; i++) {
-      output[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize); // White noise fade-out
+      output[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
     }
 
     whiteNoise.buffer = buffer;
@@ -123,78 +142,97 @@ function playGameOverSound() {
     whiteNoise.start(audioCtx.currentTime + startTime);
   }
 
-  // BOOM + SPLASH effect
-  //   playBoom(80, 0.0, 1.0, 2); // Deep BOOM (bass)
-  playSplash(0.3); // Splashy white noise
+  // Boom + Splash for game over
+//   playBoom(80, 0.0, 1.0);
+  playSplash(0.3);
 }
 
 const ManhattanShadow = () => {
-    const canvasRef = useRef(null);
-  
-    useEffect(() => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const ctx = canvas.getContext("2d");
-  
-      // Full width & 30% height of window
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight * 0.3;
-  
-      function drawManhattanShadow() {
-        const buildings = [];
-        const totalWidth = canvas.width;
-        let x = 0;
-  
-        // Create buildings with varying width and height
-        while (x < totalWidth) {
-          let width = Math.random() * 50 + 40; // 40 to 90 px
-          let height = Math.random() * (canvas.height * 0.7) + canvas.height * 0.3; // 30% to 100% of skyline
-  
-          buildings.push({ x, width, height });
-          x += width + 10; // Small gap between buildings
-        }
-  
-        // Draw buildings
-        ctx.fillStyle = "black";
-        buildings.forEach((building) => {
-          ctx.fillRect(building.x, canvas.height - building.height, building.width, building.height);
-  
-          // Draw windows (small yellow squares)
-          ctx.fillStyle = "yellow";
-          for (let wx = building.x + 5; wx < building.x + building.width - 5; wx += 10) {
-            for (let wy = canvas.height - building.height + 5; wy < canvas.height - 10; wy += 15) {
-              if (Math.random() > 0.3) {
-                ctx.fillRect(wx, wy, 5, 5); // Small square windows
-              }
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+
+    // Full width & 30% height of window
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight * 0.3;
+
+    function drawManhattanShadow() {
+      const buildings = [];
+      const totalWidth = canvas.width;
+      let x = 0;
+
+      // Create buildings with varying width and height
+      while (x < totalWidth) {
+        let width = Math.random() * 50 + 40; // 40 to 90 px
+        let height =
+          Math.random() * (canvas.height * 0.7) + canvas.height * 0.3; // 30% to 100% of skyline
+
+        buildings.push({ x, width, height });
+        x += width + 10; // Small gap between buildings
+      }
+
+      // Draw buildings
+      ctx.fillStyle = "black";
+      buildings.forEach((building) => {
+        ctx.fillRect(
+          building.x,
+          canvas.height - building.height,
+          building.width,
+          building.height
+        );
+
+        // Draw windows (small yellow squares)
+        ctx.fillStyle = "yellow";
+        for (
+          let wx = building.x + 5;
+          wx < building.x + building.width - 5;
+          wx += 10
+        ) {
+          for (
+            let wy = canvas.height - building.height + 5;
+            wy < canvas.height - 10;
+            wy += 15
+          ) {
+            if (Math.random() > 0.3) {
+              ctx.fillRect(wx, wy, 5, 5); // Small square windows
             }
           }
-          ctx.fillStyle = "black"; // Reset fill color for next building
-        });
-  
-        // Add a fading shadow effect
-        const gradient = ctx.createLinearGradient(0, canvas.height - 20, 0, canvas.height);
-        gradient.addColorStop(0, "rgba(254, 254, 254, 0.8)");
-        gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
-      }
-  
-      drawManhattanShadow();
-    }, []);
-  
-    return (
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: "absolute",
-          bottom: "0",
-          left: "0",
-          width: "100%",
-          background: "transparent",
-        }}
-      />
-    );
-  };
+        }
+        ctx.fillStyle = "black"; // Reset fill color for next building
+      });
+
+      // Add a fading shadow effect
+      const gradient = ctx.createLinearGradient(
+        0,
+        canvas.height - 20,
+        0,
+        canvas.height
+      );
+      gradient.addColorStop(0, "rgba(254, 254, 254, 0.8)");
+      gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+    }
+
+    drawManhattanShadow();
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "absolute",
+        bottom: "0",
+        left: "0",
+        width: "100%",
+        background: "transparent",
+      }}
+    />
+  );
+};
 
 const ShooterGame: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
