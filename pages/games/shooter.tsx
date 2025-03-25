@@ -182,7 +182,9 @@ const ShooterGame: React.FC = () => {
     <div className="onebitpage-shootergame">
       <div className="onebitpage-shootergame__name">
         <RatingGroup.Root count={5} defaultValue={3}>
-          <RatingGroup.Label>1Bit-Shooter (Single - Player)</RatingGroup.Label>
+          <RatingGroup.Label>
+                1Bit-Shooter (Single - Player)
+            </RatingGroup.Label>
           <RatingGroup.Control>
             <RatingGroup.Context>
               {({ items }) =>
@@ -279,6 +281,8 @@ const ShooterGame: React.FC = () => {
         )}
       </div>{" "}
       <div className="onebitpage-shootergame__intro">
+        <p>Music & Code by : <a href="https://www.linkedin.com/in/harishoraon/" target="_blank">Harish Oraon</a></p>
+        <br /><br />
         <p>
           1Bit Shooter is an action-packed arcade-style shooting game where you
           control a fighter jet to take down incoming enemies. Navigate your
