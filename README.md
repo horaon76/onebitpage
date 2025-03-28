@@ -37,6 +37,6 @@ Image by <a href="https://pixabay.com/users/tylijura-22072131/?utm_source=link-a
     <a href="https://www.flaticon.com/free-icons/jet" title="jet icons">Jet icons created by Vectorslab - Flaticon</a>
     <a href="https://www.flaticon.com/free-icons/aircraft" title="aircraft icons">Aircraft icons created by Smashicons - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/jet-plane" title="jet plane icons">Jet plane icons created by smashingstocks - Flaticon</a>
-
-
+<a href="https://www.flaticon.com/free-icons/thunder" title="thunder icons">Thunder icons created by kliwir art - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/thunder" title="thunder icons">Thunder icons created by Stockio - Flaticon</a>
     */}
