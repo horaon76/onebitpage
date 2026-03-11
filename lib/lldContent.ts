@@ -31,10 +31,12 @@ export const LLD_CATEGORIES: CategoryInfo[] = [
     description: "Concerned with how classes and objects are composed to form larger structures.",
     patterns: [
       { slug: "adapter", title: "Adapter", description: "Allow incompatible interfaces to work together" },
+      { slug: "bridge", title: "Bridge", description: "Decouple an abstraction from its implementation" },
+      { slug: "composite", title: "Composite", description: "Compose objects into tree structures" },
       { slug: "decorator", title: "Decorator", description: "Attach new behavior to objects dynamically" },
       { slug: "facade", title: "Facade", description: "Provide a simplified interface to a complex subsystem" },
+      { slug: "flyweight", title: "Flyweight", description: "Share common state to support large numbers of fine-grained objects" },
       { slug: "proxy", title: "Proxy", description: "Provide a surrogate or placeholder for another object" },
-      { slug: "composite", title: "Composite", description: "Compose objects into tree structures" },
     ],
   },
   {
@@ -42,11 +44,17 @@ export const LLD_CATEGORIES: CategoryInfo[] = [
     title: "Behavioral Patterns",
     description: "Focused on communication between objects and assignment of responsibilities.",
     patterns: [
-      { slug: "observer", title: "Observer", description: "Define a subscription mechanism to notify multiple objects" },
-      { slug: "strategy", title: "Strategy", description: "Define a family of algorithms, make them interchangeable" },
+      { slug: "chain-of-responsibility", title: "Chain of Responsibility", description: "Pass requests along a chain of handlers" },
       { slug: "command", title: "Command", description: "Encapsulate a request as an object" },
+      { slug: "interpreter", title: "Interpreter", description: "Define a grammar for a language and an interpreter that uses it to evaluate sentences" },
+      { slug: "iterator", title: "Iterator", description: "Sequentially access elements of a collection without exposing its representation" },
+      { slug: "mediator", title: "Mediator", description: "Define an object that encapsulates how a set of objects interact" },
+      { slug: "memento", title: "Memento", description: "Capture and restore an object's internal state without violating encapsulation" },
+      { slug: "observer", title: "Observer", description: "Define a subscription mechanism to notify multiple objects" },
       { slug: "state", title: "State", description: "Allow an object to alter its behavior when its state changes" },
+      { slug: "strategy", title: "Strategy", description: "Define a family of algorithms, make them interchangeable" },
       { slug: "template-method", title: "Template Method", description: "Define the skeleton of an algorithm, defer steps to subclasses" },
+      { slug: "visitor", title: "Visitor", description: "Separate an algorithm from the object structure it operates on" },
     ],
   },
   {

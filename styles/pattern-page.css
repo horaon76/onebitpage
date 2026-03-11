@@ -146,8 +146,8 @@
 
 .pp-diagram-viewport {
   flex: 1;
-  min-height: 350px;
-  max-height: 500px;
+  min-height: 420px;
+  max-height: 680px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -164,14 +164,14 @@
 .pp-diagram-svg {
   transition: transform 0.1s ease-out;
   transform-origin: center center;
+  width: 100%;
 }
 
 .pp-diagram-svg svg {
   display: block;
-  max-width: 100%;
-  max-height: 300px;
-  width: auto;
+  width: 100%;
   height: auto;
+  max-width: 100%;
 }
 
 .pp-diagram-toolbar {
@@ -260,6 +260,7 @@
 
 .pp-diagram-static svg {
   display: block;
+  width: 100%;
   max-width: 100%;
   height: auto;
   min-height: 160px;

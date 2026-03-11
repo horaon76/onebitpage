@@ -1,4 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from "next";
+import { useRouter } from "next/router";
 import fs from "fs";
 import path from "path";
 import {
@@ -75,11 +76,13 @@ function buildPatternTocHtml(data: PatternData): string {
 }
 
 export default function PatternPage({ category, pattern, htmlContent, patternData, patternTocHtml }: Props) {
+  const router = useRouter();
+
   // If interactive pattern data is available, use the new PatternPage component
   if (patternData) {
     return (
       <TutorialLayout htmlContent={patternTocHtml}>
-        <PatternPageComponent data={patternData} />
+        <PatternPageComponent key={router.asPath} data={patternData} />
       </TutorialLayout>
     );
   }

@@ -32,10 +32,10 @@ export default function Header({ menu }: HeaderProps) {
 
         {/* Nav */}
         <nav className={`site-header__nav ${mobileMenuOpen ? "site-header__nav--open" : ""}`}>
-          {/* LLD Dropdown */}
+          {/* Design Patterns (LLD) */}
           <Menu.Root>
             <Menu.Trigger className="site-header__nav-btn">
-              LLD <ChevronDown size={14} />
+              Design Patterns <ChevronDown size={14} />
             </Menu.Trigger>
             <Menu.Positioner>
               <Menu.Content className="site-header__dropdown">
@@ -55,10 +55,10 @@ export default function Header({ menu }: HeaderProps) {
             </Menu.Positioner>
           </Menu.Root>
 
-          {/* HLD Dropdown */}
+          {/* System Design (HLD) */}
           <Menu.Root>
             <Menu.Trigger className="site-header__nav-btn">
-              HLD <ChevronDown size={14} />
+              System Design <ChevronDown size={14} />
             </Menu.Trigger>
             <Menu.Positioner>
               <Menu.Content className="site-header__dropdown">
@@ -76,6 +76,35 @@ export default function Header({ menu }: HeaderProps) {
                 </Menu.Item>
                 <Menu.Item value="case-studies" className="site-header__dropdown-item">
                   <Link href="/hld/case-studies" onClick={() => setMobileMenuOpen(false)}>Case Studies</Link>
+                </Menu.Item>
+              </Menu.Content>
+            </Menu.Positioner>
+          </Menu.Root>
+
+          {/* Tech Insights */}
+          <Menu.Root>
+            <Menu.Trigger className="site-header__nav-btn">
+              Tech Insights <ChevronDown size={14} />
+            </Menu.Trigger>
+            <Menu.Positioner>
+              <Menu.Content className="site-header__dropdown">
+                <Menu.Item value="tech-kafka" className="site-header__dropdown-item">
+                  <Link href="/tech/message-queues/kafka" onClick={() => setMobileMenuOpen(false)}>Kafka Deep Dive</Link>
+                </Menu.Item>
+                <Menu.Item value="tech-redis" className="site-header__dropdown-item">
+                  <Link href="/tech/databases-internals/redis" onClick={() => setMobileMenuOpen(false)}>Redis Internals</Link>
+                </Menu.Item>
+                <Menu.Item value="tech-spark" className="site-header__dropdown-item">
+                  <Link href="/tech/data-processing/spark" onClick={() => setMobileMenuOpen(false)}>Spark Architecture</Link>
+                </Menu.Item>
+                <Menu.Item value="tech-raft" className="site-header__dropdown-item">
+                  <Link href="/tech/consensus-coordination/raft" onClick={() => setMobileMenuOpen(false)}>Raft Consensus</Link>
+                </Menu.Item>
+                <Menu.Item value="tech-kubernetes" className="site-header__dropdown-item">
+                  <Link href="/tech/infrastructure/kubernetes" onClick={() => setMobileMenuOpen(false)}>Kubernetes Internals</Link>
+                </Menu.Item>
+                <Menu.Item value="tech-all" className="site-header__dropdown-item">
+                  <Link href="/tech" onClick={() => setMobileMenuOpen(false)}>All Tech Topics →</Link>
                 </Menu.Item>
               </Menu.Content>
             </Menu.Positioner>

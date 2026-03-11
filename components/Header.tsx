@@ -17,10 +17,10 @@ export default function Header({ menu }: MenuProps) {
           </Link>
         </div>
 
-        {/* LLD Dropdown */}
+        {/* Design Patterns (was LLD) */}
         <Menu.Root>
           <Menu.Trigger className={styles.menuButton}>
-            LLD <ChevronDown size={16} />
+            Design Patterns <ChevronDown size={16} />
           </Menu.Trigger>
           <Menu.Positioner>
             <Menu.Content className={styles.menuList}>
@@ -40,15 +40,56 @@ export default function Header({ menu }: MenuProps) {
           </Menu.Positioner>
         </Menu.Root>
 
-        {/* HLD Placeholder */}
+        {/* System Design (was HLD) */}
         <Menu.Root>
           <Menu.Trigger className={styles.menuButton}>
-            HLD <ChevronDown size={16} />
+            System Design <ChevronDown size={16} />
           </Menu.Trigger>
           <Menu.Positioner>
             <Menu.Content className={styles.menuList}>
-              <Menu.Item value="hld-coming" className={styles.menuItem}>
-                <Link href="/hld">Coming Soon</Link>
+              <Menu.Item value="hld-fundamentals" className={styles.menuItem}>
+                <Link href="/hld/fundamentals">Fundamentals</Link>
+              </Menu.Item>
+              <Menu.Item value="hld-data-systems" className={styles.menuItem}>
+                <Link href="/hld/data-systems">Data Systems</Link>
+              </Menu.Item>
+              <Menu.Item value="hld-distributed" className={styles.menuItem}>
+                <Link href="/hld/distributed-systems">Distributed Systems</Link>
+              </Menu.Item>
+              <Menu.Item value="hld-architecture" className={styles.menuItem}>
+                <Link href="/hld/architecture">Architecture Patterns</Link>
+              </Menu.Item>
+              <Menu.Item value="hld-case-studies" className={styles.menuItem}>
+                <Link href="/hld/case-studies">Case Studies</Link>
+              </Menu.Item>
+            </Menu.Content>
+          </Menu.Positioner>
+        </Menu.Root>
+
+        {/* Tech Insights */}
+        <Menu.Root>
+          <Menu.Trigger className={styles.menuButton}>
+            Tech Insights <ChevronDown size={16} />
+          </Menu.Trigger>
+          <Menu.Positioner>
+            <Menu.Content className={styles.menuList}>
+              <Menu.Item value="tech-kafka" className={styles.menuItem}>
+                <Link href="/tech/message-queues/kafka">Kafka Deep Dive</Link>
+              </Menu.Item>
+              <Menu.Item value="tech-redis" className={styles.menuItem}>
+                <Link href="/tech/databases-internals/redis">Redis Internals</Link>
+              </Menu.Item>
+              <Menu.Item value="tech-spark" className={styles.menuItem}>
+                <Link href="/tech/data-processing/spark">Spark Architecture</Link>
+              </Menu.Item>
+              <Menu.Item value="tech-raft" className={styles.menuItem}>
+                <Link href="/tech/consensus-coordination/raft">Raft Consensus</Link>
+              </Menu.Item>
+              <Menu.Item value="tech-kubernetes" className={styles.menuItem}>
+                <Link href="/tech/infrastructure/kubernetes">Kubernetes Internals</Link>
+              </Menu.Item>
+              <Menu.Item value="tech-comparisons" className={styles.menuItem}>
+                <Link href="/tech">All Tech Topics →</Link>
               </Menu.Item>
             </Menu.Content>
           </Menu.Positioner>
