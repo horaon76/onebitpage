@@ -10,12 +10,51 @@ export default function Header({ menu }: MenuProps) {
   return (
     <header className="headerContainer">
       <div className="header">
-        {/* Tab-based Navigation */}
+        {/* Brand */}
         <div className="header__item header__item__brand">
-          <Link key={"section1"} href={`/`} passHref>
+          <Link key={"brand"} href={`/`} passHref>
             onebitpage
           </Link>
         </div>
+
+        {/* LLD Dropdown */}
+        <Menu.Root>
+          <Menu.Trigger className={styles.menuButton}>
+            LLD <ChevronDown size={16} />
+          </Menu.Trigger>
+          <Menu.Positioner>
+            <Menu.Content className={styles.menuList}>
+              <Menu.Item value="creational" className={styles.menuItem}>
+                <Link href="/lld/creational">Creational Patterns</Link>
+              </Menu.Item>
+              <Menu.Item value="structural" className={styles.menuItem}>
+                <Link href="/lld/structural">Structural Patterns</Link>
+              </Menu.Item>
+              <Menu.Item value="behavioral" className={styles.menuItem}>
+                <Link href="/lld/behavioral">Behavioral Patterns</Link>
+              </Menu.Item>
+              <Menu.Item value="solid" className={styles.menuItem}>
+                <Link href="/lld/solid">SOLID Principles</Link>
+              </Menu.Item>
+            </Menu.Content>
+          </Menu.Positioner>
+        </Menu.Root>
+
+        {/* HLD Placeholder */}
+        <Menu.Root>
+          <Menu.Trigger className={styles.menuButton}>
+            HLD <ChevronDown size={16} />
+          </Menu.Trigger>
+          <Menu.Positioner>
+            <Menu.Content className={styles.menuList}>
+              <Menu.Item value="hld-coming" className={styles.menuItem}>
+                <Link href="/hld">Coming Soon</Link>
+              </Menu.Item>
+            </Menu.Content>
+          </Menu.Positioner>
+        </Menu.Root>
+
+        {/* Topic Dropdown (existing) */}
         <Menu.Root>
           <Menu.Trigger className={styles.menuButton}>
             Topic <ChevronDown size={16} />
@@ -23,7 +62,7 @@ export default function Header({ menu }: MenuProps) {
           <Menu.Positioner>
             <Menu.Content className={styles.menuList}>
               {Object.keys(menu).map((section) => (
-                <div className="header__item">
+                <div className="header__item" key={section}>
                   <Menu.Item value="react" className={styles.menuItem}>
                     <Link key={section} href={`/${menu[section]?.title}`} passHref>
                         {menu[section]?.title}
@@ -34,13 +73,9 @@ export default function Header({ menu }: MenuProps) {
             </Menu.Content>
           </Menu.Positioner>
         </Menu.Root>
+
         <div className="header__item">
-          <Link key={"section1"} href={`/cheatsheet`} passHref>
-            Cheat Sheet
-          </Link>
-        </div>
-        <div className="header__item">
-          <Link key={"section1"} href={`/games`} passHref>
+          <Link key={"games"} href={`/games`} passHref>
             HTML5 Games
           </Link>
         </div>
@@ -54,7 +89,7 @@ export default function Header({ menu }: MenuProps) {
             passHref
             target="_blank"
           >
-            Contribute to Articles &nbsp;
+            Contribute &nbsp;
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"

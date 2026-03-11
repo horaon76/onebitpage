@@ -135,7 +135,7 @@ const ShooterGame: React.FC = () => {
       }
 
       // Process game updates with fixed timestep
-      const ctx = initializeGame(canvasRef);
+      const ctx = initializeGame(canvasRef as React.RefObject<HTMLCanvasElement>);
       if (!ctx) return;
 
       // Clear canvas
@@ -341,10 +341,10 @@ const ShooterGame: React.FC = () => {
     const movePlayer = () => {
       const moveSpeed = 10; // Adjust this value for faster/slower movement
 
-      if (keys.ArrowLeft) {
+      if (keys.current.ArrowLeft) {
         player.current.x = Math.max(25, player.current.x - moveSpeed);
       }
-      if (keys.ArrowRight) {
+      if (keys.current.ArrowRight) {
         player.current.x = Math.min(
           CANVAS_WIDTH - 25,
           player.current.x + moveSpeed

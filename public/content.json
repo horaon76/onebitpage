@@ -1,130 +1,392 @@
 [
   {
-    "title": "Coding",
+    "title": "LLD",
     "order": 1,
-    "path": "Coding",
+    "path": "LLD",
     "breadcrumb": [
-      "Coding"
-    ],
-    "children": []
-  },
-  {
-    "title": "System Design",
-    "order": 2,
-    "path": "System Design",
-    "breadcrumb": [
-      "System Design"
-    ],
-    "children": []
-  },
-  {
-    "title": "Frontend",
-    "order": 3,
-    "path": "Frontend",
-    "breadcrumb": [
-      "Frontend"
-    ],
-    "children": []
-  },
-  {
-    "title": "Database",
-    "order": 4,
-    "path": "Database",
-    "breadcrumb": [
-      "Database"
+      "LLD"
     ],
     "children": [
       {
-        "title": "Mysql",
-        "order": 9999,
-        "path": "Database",
+        "title": "Creational",
+        "order": 1,
+        "path": "LLD",
         "breadcrumb": [
-          "Database",
-          "Mysql"
+          "LLD",
+          "Creational"
         ],
         "children": [
           {
-            "title": "Basic",
+            "slug": "LLD/Creational/Singleton",
+            "title": "Singleton",
+            "shortTitle": "Singleton",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Creational",
             "order": 1,
-            "path": "Database/Mysql",
+            "path": "LLD/Creational/Singleton",
             "breadcrumb": [
-              "Database",
-              "Mysql",
-              "Basic"
-            ],
-            "children": [
-              {
-                "slug": "Database/Mysql/Basic/Basic",
-                "title": "MySQL Scaling",
-                "shortTitle": "MySQL Scaling",
-                "intro": "",
-                "tags": [],
-                "date": "2025-03-23",
-                "category": "Database",
-                "order": 1,
-                "path": "Database/Mysql/Basic/Basic",
-                "breadcrumb": [
-                  "Database",
-                  "Mysql",
-                  "Basic",
-                  "Basic.md",
-                  "Basic"
-                ]
-              }
+              "LLD",
+              "Creational",
+              "Singleton.md",
+              "Singleton"
             ]
           },
           {
-            "slug": "Database/Mysql/GettingStarted",
-            "title": "MySQL Scaling",
-            "shortTitle": "MySQL Scaling",
+            "slug": "LLD/Creational/FactoryMethod",
+            "title": "Factory Method",
+            "shortTitle": "Factory Method",
             "intro": "",
             "tags": [],
-            "date": "2025-03-23",
-            "category": "Database",
+            "date": "",
+            "category": "Creational",
             "order": 2,
-            "path": "Database/Mysql/GettingStarted",
+            "path": "LLD/Creational/FactoryMethod",
             "breadcrumb": [
-              "Database",
-              "Mysql",
-              "GettingStarted.md",
-              "GettingStarted"
+              "LLD",
+              "Creational",
+              "FactoryMethod.md",
+              "FactoryMethod"
             ]
           },
           {
-            "slug": "Database/Mysql/Basic",
-            "title": "MySQL Scaling",
-            "shortTitle": "MySQL Scaling",
+            "slug": "LLD/Creational/AbstractFactory",
+            "title": "Abstract Factory",
+            "shortTitle": "Abstract Factory",
             "intro": "",
             "tags": [],
-            "date": "2025-03-23",
-            "category": "Database",
+            "date": "",
+            "category": "Creational",
             "order": 3,
-            "path": "Database/Mysql/Basic",
+            "path": "LLD/Creational/AbstractFactory",
             "breadcrumb": [
-              "Database",
-              "Mysql",
-              "Basic.md",
-              "Basic"
+              "LLD",
+              "Creational",
+              "AbstractFactory.md",
+              "AbstractFactory"
             ]
           },
           {
-            "slug": "Database/Mysql/Advanced",
-            "title": "MySQL Scaling",
-            "shortTitle": "MySQL Scaling",
-            "intro": "hello",
-            "tags": [
-              "1",
-              "2"
-            ],
-            "date": "2025-03-23",
-            "category": "Database",
+            "slug": "LLD/Creational/Builder",
+            "title": "Builder",
+            "shortTitle": "Builder",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Creational",
             "order": 4,
-            "path": "Database/Mysql/Advanced",
+            "path": "LLD/Creational/Builder",
             "breadcrumb": [
-              "Database",
-              "Mysql",
-              "Advanced.md",
-              "Advanced"
+              "LLD",
+              "Creational",
+              "Builder.md",
+              "Builder"
+            ]
+          },
+          {
+            "slug": "LLD/Creational/Prototype",
+            "title": "Prototype",
+            "shortTitle": "Prototype",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Creational",
+            "order": 5,
+            "path": "LLD/Creational/Prototype",
+            "breadcrumb": [
+              "LLD",
+              "Creational",
+              "Prototype.md",
+              "Prototype"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Structural",
+        "order": 2,
+        "path": "LLD",
+        "breadcrumb": [
+          "LLD",
+          "Structural"
+        ],
+        "children": [
+          {
+            "slug": "LLD/Structural/Adapter",
+            "title": "Adapter",
+            "shortTitle": "Adapter",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Structural",
+            "order": 1,
+            "path": "LLD/Structural/Adapter",
+            "breadcrumb": [
+              "LLD",
+              "Structural",
+              "Adapter.md",
+              "Adapter"
+            ]
+          },
+          {
+            "slug": "LLD/Structural/Decorator",
+            "title": "Decorator",
+            "shortTitle": "Decorator",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Structural",
+            "order": 2,
+            "path": "LLD/Structural/Decorator",
+            "breadcrumb": [
+              "LLD",
+              "Structural",
+              "Decorator.md",
+              "Decorator"
+            ]
+          },
+          {
+            "slug": "LLD/Structural/Facade",
+            "title": "Facade",
+            "shortTitle": "Facade",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Structural",
+            "order": 3,
+            "path": "LLD/Structural/Facade",
+            "breadcrumb": [
+              "LLD",
+              "Structural",
+              "Facade.md",
+              "Facade"
+            ]
+          },
+          {
+            "slug": "LLD/Structural/Proxy",
+            "title": "Proxy",
+            "shortTitle": "Proxy",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Structural",
+            "order": 4,
+            "path": "LLD/Structural/Proxy",
+            "breadcrumb": [
+              "LLD",
+              "Structural",
+              "Proxy.md",
+              "Proxy"
+            ]
+          },
+          {
+            "slug": "LLD/Structural/Composite",
+            "title": "Composite",
+            "shortTitle": "Composite",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Structural",
+            "order": 5,
+            "path": "LLD/Structural/Composite",
+            "breadcrumb": [
+              "LLD",
+              "Structural",
+              "Composite.md",
+              "Composite"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Behavioral",
+        "order": 3,
+        "path": "LLD",
+        "breadcrumb": [
+          "LLD",
+          "Behavioral"
+        ],
+        "children": [
+          {
+            "slug": "LLD/Behavioral/Observer",
+            "title": "Observer",
+            "shortTitle": "Observer",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Behavioral",
+            "order": 1,
+            "path": "LLD/Behavioral/Observer",
+            "breadcrumb": [
+              "LLD",
+              "Behavioral",
+              "Observer.md",
+              "Observer"
+            ]
+          },
+          {
+            "slug": "LLD/Behavioral/Strategy",
+            "title": "Strategy",
+            "shortTitle": "Strategy",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Behavioral",
+            "order": 2,
+            "path": "LLD/Behavioral/Strategy",
+            "breadcrumb": [
+              "LLD",
+              "Behavioral",
+              "Strategy.md",
+              "Strategy"
+            ]
+          },
+          {
+            "slug": "LLD/Behavioral/Command",
+            "title": "Command",
+            "shortTitle": "Command",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Behavioral",
+            "order": 3,
+            "path": "LLD/Behavioral/Command",
+            "breadcrumb": [
+              "LLD",
+              "Behavioral",
+              "Command.md",
+              "Command"
+            ]
+          },
+          {
+            "slug": "LLD/Behavioral/State",
+            "title": "State",
+            "shortTitle": "State",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Behavioral",
+            "order": 4,
+            "path": "LLD/Behavioral/State",
+            "breadcrumb": [
+              "LLD",
+              "Behavioral",
+              "State.md",
+              "State"
+            ]
+          },
+          {
+            "slug": "LLD/Behavioral/TemplateMethod",
+            "title": "Template Method",
+            "shortTitle": "Template Method",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Behavioral",
+            "order": 5,
+            "path": "LLD/Behavioral/TemplateMethod",
+            "breadcrumb": [
+              "LLD",
+              "Behavioral",
+              "TemplateMethod.md",
+              "TemplateMethod"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "SOLID",
+        "order": 4,
+        "path": "LLD",
+        "breadcrumb": [
+          "LLD",
+          "SOLID"
+        ],
+        "children": [
+          {
+            "slug": "LLD/SOLID/SRP",
+            "title": "Single Responsibility (SRP)",
+            "shortTitle": "Single Responsibility (SRP)",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "SOLID",
+            "order": 1,
+            "path": "LLD/SOLID/SRP",
+            "breadcrumb": [
+              "LLD",
+              "SOLID",
+              "SRP.md",
+              "SRP"
+            ]
+          },
+          {
+            "slug": "LLD/SOLID/OCP",
+            "title": "Open/Closed (OCP)",
+            "shortTitle": "Open/Closed (OCP)",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "SOLID",
+            "order": 2,
+            "path": "LLD/SOLID/OCP",
+            "breadcrumb": [
+              "LLD",
+              "SOLID",
+              "OCP.md",
+              "OCP"
+            ]
+          },
+          {
+            "slug": "LLD/SOLID/LSP",
+            "title": "Liskov Substitution (LSP)",
+            "shortTitle": "Liskov Substitution (LSP)",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "SOLID",
+            "order": 3,
+            "path": "LLD/SOLID/LSP",
+            "breadcrumb": [
+              "LLD",
+              "SOLID",
+              "LSP.md",
+              "LSP"
+            ]
+          },
+          {
+            "slug": "LLD/SOLID/ISP",
+            "title": "Interface Segregation (ISP)",
+            "shortTitle": "Interface Segregation (ISP)",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "SOLID",
+            "order": 4,
+            "path": "LLD/SOLID/ISP",
+            "breadcrumb": [
+              "LLD",
+              "SOLID",
+              "ISP.md",
+              "ISP"
+            ]
+          },
+          {
+            "slug": "LLD/SOLID/DIP",
+            "title": "Dependency Inversion (DIP)",
+            "shortTitle": "Dependency Inversion (DIP)",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "SOLID",
+            "order": 5,
+            "path": "LLD/SOLID/DIP",
+            "breadcrumb": [
+              "LLD",
+              "SOLID",
+              "DIP.md",
+              "DIP"
             ]
           }
         ]
@@ -132,12 +394,408 @@
     ]
   },
   {
-    "title": "Interview Experience",
-    "order": 5,
-    "path": "Interview Experience",
+    "title": "HLD",
+    "order": 2,
+    "path": "HLD",
     "breadcrumb": [
-      "Interview Experience"
+      "HLD"
     ],
-    "children": []
+    "children": [
+      {
+        "title": "Fundamentals",
+        "order": 1,
+        "path": "HLD",
+        "breadcrumb": [
+          "HLD",
+          "Fundamentals"
+        ],
+        "children": [
+          {
+            "slug": "HLD/Fundamentals/Scalability",
+            "title": "Scalability",
+            "shortTitle": "Scalability",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Fundamentals",
+            "order": 1,
+            "path": "HLD/Fundamentals/Scalability",
+            "breadcrumb": [
+              "HLD",
+              "Fundamentals",
+              "Scalability.md",
+              "Scalability"
+            ]
+          },
+          {
+            "slug": "HLD/Fundamentals/LoadBalancing",
+            "title": "Load Balancing",
+            "shortTitle": "Load Balancing",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Fundamentals",
+            "order": 2,
+            "path": "HLD/Fundamentals/LoadBalancing",
+            "breadcrumb": [
+              "HLD",
+              "Fundamentals",
+              "LoadBalancing.md",
+              "LoadBalancing"
+            ]
+          },
+          {
+            "slug": "HLD/Fundamentals/Caching",
+            "title": "Caching",
+            "shortTitle": "Caching",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Fundamentals",
+            "order": 3,
+            "path": "HLD/Fundamentals/Caching",
+            "breadcrumb": [
+              "HLD",
+              "Fundamentals",
+              "Caching.md",
+              "Caching"
+            ]
+          },
+          {
+            "slug": "HLD/Fundamentals/CDN",
+            "title": "CDN",
+            "shortTitle": "CDN",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Fundamentals",
+            "order": 4,
+            "path": "HLD/Fundamentals/CDN",
+            "breadcrumb": [
+              "HLD",
+              "Fundamentals",
+              "CDN.md",
+              "CDN"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "DataSystems",
+        "order": 2,
+        "path": "HLD",
+        "breadcrumb": [
+          "HLD",
+          "DataSystems"
+        ],
+        "children": [
+          {
+            "slug": "HLD/DataSystems/DatabaseSharding",
+            "title": "Database Sharding",
+            "shortTitle": "Database Sharding",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Data Systems",
+            "order": 1,
+            "path": "HLD/DataSystems/DatabaseSharding",
+            "breadcrumb": [
+              "HLD",
+              "DataSystems",
+              "DatabaseSharding.md",
+              "DatabaseSharding"
+            ]
+          },
+          {
+            "slug": "HLD/DataSystems/Replication",
+            "title": "Replication & Failover",
+            "shortTitle": "Replication & Failover",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Data Systems",
+            "order": 2,
+            "path": "HLD/DataSystems/Replication",
+            "breadcrumb": [
+              "HLD",
+              "DataSystems",
+              "Replication.md",
+              "Replication"
+            ]
+          },
+          {
+            "slug": "HLD/DataSystems/SQLvsNoSQL",
+            "title": "SQL vs NoSQL",
+            "shortTitle": "SQL vs NoSQL",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Data Systems",
+            "order": 3,
+            "path": "HLD/DataSystems/SQLvsNoSQL",
+            "breadcrumb": [
+              "HLD",
+              "DataSystems",
+              "SQLvsNoSQL.md",
+              "SQLvsNoSQL"
+            ]
+          },
+          {
+            "slug": "HLD/DataSystems/DataPartitioning",
+            "title": "Data Partitioning",
+            "shortTitle": "Data Partitioning",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Data Systems",
+            "order": 4,
+            "path": "HLD/DataSystems/DataPartitioning",
+            "breadcrumb": [
+              "HLD",
+              "DataSystems",
+              "DataPartitioning.md",
+              "DataPartitioning"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "DistributedSystems",
+        "order": 3,
+        "path": "HLD",
+        "breadcrumb": [
+          "HLD",
+          "DistributedSystems"
+        ],
+        "children": [
+          {
+            "slug": "HLD/DistributedSystems/CAPTheorem",
+            "title": "CAP Theorem",
+            "shortTitle": "CAP Theorem",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Distributed Systems",
+            "order": 1,
+            "path": "HLD/DistributedSystems/CAPTheorem",
+            "breadcrumb": [
+              "HLD",
+              "DistributedSystems",
+              "CAPTheorem.md",
+              "CAPTheorem"
+            ]
+          },
+          {
+            "slug": "HLD/DistributedSystems/Consensus",
+            "title": "Consensus Algorithms",
+            "shortTitle": "Consensus Algorithms",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Distributed Systems",
+            "order": 2,
+            "path": "HLD/DistributedSystems/Consensus",
+            "breadcrumb": [
+              "HLD",
+              "DistributedSystems",
+              "Consensus.md",
+              "Consensus"
+            ]
+          },
+          {
+            "slug": "HLD/DistributedSystems/DistributedTransactions",
+            "title": "Distributed Transactions",
+            "shortTitle": "Distributed Transactions",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Distributed Systems",
+            "order": 3,
+            "path": "HLD/DistributedSystems/DistributedTransactions",
+            "breadcrumb": [
+              "HLD",
+              "DistributedSystems",
+              "DistributedTransactions.md",
+              "DistributedTransactions"
+            ]
+          },
+          {
+            "slug": "HLD/DistributedSystems/ServiceDiscovery",
+            "title": "Service Discovery",
+            "shortTitle": "Service Discovery",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Distributed Systems",
+            "order": 4,
+            "path": "HLD/DistributedSystems/ServiceDiscovery",
+            "breadcrumb": [
+              "HLD",
+              "DistributedSystems",
+              "ServiceDiscovery.md",
+              "ServiceDiscovery"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Architecture",
+        "order": 4,
+        "path": "HLD",
+        "breadcrumb": [
+          "HLD",
+          "Architecture"
+        ],
+        "children": [
+          {
+            "slug": "HLD/Architecture/Microservices",
+            "title": "Microservices Architecture",
+            "shortTitle": "Microservices Architecture",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Architecture Patterns",
+            "order": 1,
+            "path": "HLD/Architecture/Microservices",
+            "breadcrumb": [
+              "HLD",
+              "Architecture",
+              "Microservices.md",
+              "Microservices"
+            ]
+          },
+          {
+            "slug": "HLD/Architecture/EventDriven",
+            "title": "Event-Driven Architecture",
+            "shortTitle": "Event-Driven Architecture",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Architecture Patterns",
+            "order": 2,
+            "path": "HLD/Architecture/EventDriven",
+            "breadcrumb": [
+              "HLD",
+              "Architecture",
+              "EventDriven.md",
+              "EventDriven"
+            ]
+          },
+          {
+            "slug": "HLD/Architecture/CQRS",
+            "title": "CQRS",
+            "shortTitle": "CQRS",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Architecture Patterns",
+            "order": 3,
+            "path": "HLD/Architecture/CQRS",
+            "breadcrumb": [
+              "HLD",
+              "Architecture",
+              "CQRS.md",
+              "CQRS"
+            ]
+          },
+          {
+            "slug": "HLD/Architecture/APIGateway",
+            "title": "API Gateway",
+            "shortTitle": "API Gateway",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Architecture Patterns",
+            "order": 4,
+            "path": "HLD/Architecture/APIGateway",
+            "breadcrumb": [
+              "HLD",
+              "Architecture",
+              "APIGateway.md",
+              "APIGateway"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "CaseStudies",
+        "order": 5,
+        "path": "HLD",
+        "breadcrumb": [
+          "HLD",
+          "CaseStudies"
+        ],
+        "children": [
+          {
+            "slug": "HLD/CaseStudies/URLShortener",
+            "title": "Design a URL Shortener",
+            "shortTitle": "Design a URL Shortener",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Case Studies",
+            "order": 1,
+            "path": "HLD/CaseStudies/URLShortener",
+            "breadcrumb": [
+              "HLD",
+              "CaseStudies",
+              "URLShortener.md",
+              "URLShortener"
+            ]
+          },
+          {
+            "slug": "HLD/CaseStudies/ChatSystem",
+            "title": "Design a Chat System",
+            "shortTitle": "Design a Chat System",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Case Studies",
+            "order": 2,
+            "path": "HLD/CaseStudies/ChatSystem",
+            "breadcrumb": [
+              "HLD",
+              "CaseStudies",
+              "ChatSystem.md",
+              "ChatSystem"
+            ]
+          },
+          {
+            "slug": "HLD/CaseStudies/NewsFeed",
+            "title": "Design a News Feed",
+            "shortTitle": "Design a News Feed",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Case Studies",
+            "order": 3,
+            "path": "HLD/CaseStudies/NewsFeed",
+            "breadcrumb": [
+              "HLD",
+              "CaseStudies",
+              "NewsFeed.md",
+              "NewsFeed"
+            ]
+          },
+          {
+            "slug": "HLD/CaseStudies/VideoStreaming",
+            "title": "Design a Video Streaming Platform",
+            "shortTitle": "Design a Video Streaming Platform",
+            "intro": "",
+            "tags": [],
+            "date": "",
+            "category": "Case Studies",
+            "order": 4,
+            "path": "HLD/CaseStudies/VideoStreaming",
+            "breadcrumb": [
+              "HLD",
+              "CaseStudies",
+              "VideoStreaming.md",
+              "VideoStreaming"
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]
