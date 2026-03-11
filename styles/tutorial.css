@@ -621,6 +621,12 @@
   margin: 0;
 }
 
+/* Allow scaled SVGs to exceed container width without being clamped */
+.mermaid-container .mermaid svg,
+.mermaid-container pre.mermaid svg {
+  max-width: none !important;
+}
+
 /* Toolbar — vertical strip on the right */
 .mermaid-toolbar {
   display: flex;
@@ -767,6 +773,13 @@
 .onepagebit pre code {
   color: inherit;
   background: none;
+}
+
+/* Giscus comments */
+.giscus-wrapper {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color, #e5e7eb);
 }
 
 /* Responsive */

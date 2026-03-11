@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { LLD_CATEGORIES, CategoryInfo } from "@/lib/lldContent";
 import { HLD_CATEGORIES, HLDCategoryInfo } from "@/lib/hldContent";
+import GiscusComments from "./GiscusComments";
 import { ChevronDown, ChevronRight, BookOpen, Layers, GitBranch, Shield, Menu, X, Server, Database, Network, Boxes } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 
@@ -235,6 +236,19 @@ export default function TutorialLayout({ children, htmlContent }: TutorialLayout
         // Skip if already wrapped
         if (el.parentElement?.classList.contains("mermaid-container")) return;
 
+        // Capture natural SVG size BEFORE wrapping so getBoundingClientRect is valid
+        const svgEl = el.querySelector("svg");
+        let naturalWidth = 0;
+        let naturalHeight = 0;
+        if (svgEl) {
+          naturalWidth = parseFloat(svgEl.getAttribute("width") || "0") || svgEl.getBoundingClientRect().width;
+          naturalHeight = parseFloat(svgEl.getAttribute("height") || "0") || svgEl.getBoundingClientRect().height;
+          // Scale the SVG element itself to 180% so layout expands to match
+          if (naturalWidth > 0) svgEl.style.width = naturalWidth * 1.8 + "px";
+          if (naturalHeight > 0) svgEl.style.height = naturalHeight * 1.8 + "px";
+          svgEl.style.maxWidth = "none";
+        }
+
         const wrapper = document.createElement("div");
         wrapper.className = "mermaid-container";
 
@@ -246,6 +260,12 @@ export default function TutorialLayout({ children, htmlContent }: TutorialLayout
 
         const viewport = document.createElement("div");
         viewport.className = "mermaid-viewport";
+        // Size viewport to exactly fit the 1.8× SVG (capped at 1000px)
+        if (naturalHeight > 0) {
+          const fittedH = Math.min(naturalHeight * 1.8 + 48, 1000);
+          viewport.style.minHeight = fittedH + "px";
+          viewport.style.maxHeight = fittedH + "px";
+        }
 
         const inner = document.createElement("div");
         inner.className = "mermaid-inner";
@@ -377,7 +397,10 @@ export default function TutorialLayout({ children, htmlContent }: TutorialLayout
     <div className="tutorial-layout">
       <Sidebar />
       <div className="tutorial-main">
-        <div className="tutorial-content">{children}</div>
+        <div className="tutorial-content">
+          {children}
+          <GiscusComments />
+        </div>
         {htmlContent && <TableOfContents html={htmlContent} />}
       </div>
     </div>
