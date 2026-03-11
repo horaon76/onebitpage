@@ -1,0 +1,546 @@
+[
+  {
+    "id": "lld-creational-singleton",
+    "title": "Singleton",
+    "description": "Ensure a class has only one instance with global access",
+    "url": "/lld/creational/singleton",
+    "category": "Creational Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-creational-factory-method",
+    "title": "Factory Method",
+    "description": "Define an interface for creating objects; let subclasses decide the concrete type",
+    "url": "/lld/creational/factory-method",
+    "category": "Creational Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-creational-abstract-factory",
+    "title": "Abstract Factory",
+    "description": "Create families of related objects without specifying concrete classes",
+    "url": "/lld/creational/abstract-factory",
+    "category": "Creational Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-creational-builder",
+    "title": "Builder",
+    "description": "Construct complex objects step by step using the same construction process",
+    "url": "/lld/creational/builder",
+    "category": "Creational Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-creational-prototype",
+    "title": "Prototype",
+    "description": "Create new objects by cloning existing ones",
+    "url": "/lld/creational/prototype",
+    "category": "Creational Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-structural-adapter",
+    "title": "Adapter",
+    "description": "Allow incompatible interfaces to work together by wrapping one in a translator",
+    "url": "/lld/structural/adapter",
+    "category": "Structural Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-structural-bridge",
+    "title": "Bridge",
+    "description": "Decouple an abstraction from its implementation so both can vary independently",
+    "url": "/lld/structural/bridge",
+    "category": "Structural Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-structural-composite",
+    "title": "Composite",
+    "description": "Compose objects into tree structures and treat individual objects and compositions uniformly",
+    "url": "/lld/structural/composite",
+    "category": "Structural Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-structural-decorator",
+    "title": "Decorator",
+    "description": "Attach additional responsibilities to an object dynamically",
+    "url": "/lld/structural/decorator",
+    "category": "Structural Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-structural-facade",
+    "title": "Facade",
+    "description": "Provide a simplified interface to a library, framework, or complex subsystem",
+    "url": "/lld/structural/facade",
+    "category": "Structural Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-structural-flyweight",
+    "title": "Flyweight",
+    "description": "Share common state to support large numbers of fine-grained objects efficiently",
+    "url": "/lld/structural/flyweight",
+    "category": "Structural Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-structural-proxy",
+    "title": "Proxy",
+    "description": "Provide a surrogate or placeholder that controls access to another object",
+    "url": "/lld/structural/proxy",
+    "category": "Structural Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-behavioral-chain-of-responsibility",
+    "title": "Chain of Responsibility",
+    "description": "Pass requests along a chain of handlers, each deciding to process or pass on",
+    "url": "/lld/behavioral/chain-of-responsibility",
+    "category": "Behavioral Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-behavioral-command",
+    "title": "Command",
+    "description": "Encapsulate a request as an object to support undo, queuing, and logging",
+    "url": "/lld/behavioral/command",
+    "category": "Behavioral Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-behavioral-interpreter",
+    "title": "Interpreter",
+    "description": "Define a grammar for a language and provide an interpreter to evaluate sentences",
+    "url": "/lld/behavioral/interpreter",
+    "category": "Behavioral Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-behavioral-iterator",
+    "title": "Iterator",
+    "description": "Provide a way to sequentially access elements of a collection without exposing its representation",
+    "url": "/lld/behavioral/iterator",
+    "category": "Behavioral Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-behavioral-mediator",
+    "title": "Mediator",
+    "description": "Define an object that encapsulates how a set of objects interact, promoting loose coupling",
+    "url": "/lld/behavioral/mediator",
+    "category": "Behavioral Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-behavioral-memento",
+    "title": "Memento",
+    "description": "Capture and restore an object's internal state without violating encapsulation",
+    "url": "/lld/behavioral/memento",
+    "category": "Behavioral Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-behavioral-observer",
+    "title": "Observer",
+    "description": "Define a subscription mechanism to notify multiple objects of state changes",
+    "url": "/lld/behavioral/observer",
+    "category": "Behavioral Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-behavioral-state",
+    "title": "State",
+    "description": "Allow an object to alter its behavior when its internal state changes",
+    "url": "/lld/behavioral/state",
+    "category": "Behavioral Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-behavioral-strategy",
+    "title": "Strategy",
+    "description": "Define a family of algorithms, encapsulate each one, and make them interchangeable",
+    "url": "/lld/behavioral/strategy",
+    "category": "Behavioral Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-behavioral-template-method",
+    "title": "Template Method",
+    "description": "Define the skeleton of an algorithm in a base class, deferring steps to subclasses",
+    "url": "/lld/behavioral/template-method",
+    "category": "Behavioral Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-behavioral-visitor",
+    "title": "Visitor",
+    "description": "Separate an algorithm from the object structure it operates on using double dispatch",
+    "url": "/lld/behavioral/visitor",
+    "category": "Behavioral Patterns",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-solid-single-responsibility",
+    "title": "Single Responsibility",
+    "description": "A class should have only one reason to change",
+    "url": "/lld/solid/single-responsibility",
+    "category": "SOLID Principles",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-solid-open-closed",
+    "title": "Open/Closed Principle",
+    "description": "Software entities should be open for extension but closed for modification",
+    "url": "/lld/solid/open-closed",
+    "category": "SOLID Principles",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-solid-liskov-substitution",
+    "title": "Liskov Substitution",
+    "description": "Subtypes must be substitutable for their base types without altering correctness",
+    "url": "/lld/solid/liskov-substitution",
+    "category": "SOLID Principles",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-solid-interface-segregation",
+    "title": "Interface Segregation",
+    "description": "Clients should not be forced to depend on interfaces they don't use",
+    "url": "/lld/solid/interface-segregation",
+    "category": "SOLID Principles",
+    "type": "pattern"
+  },
+  {
+    "id": "lld-solid-dependency-inversion",
+    "title": "Dependency Inversion",
+    "description": "Depend on abstractions, not on concretions",
+    "url": "/lld/solid/dependency-inversion",
+    "category": "SOLID Principles",
+    "type": "pattern"
+  },
+  {
+    "id": "hld-fundamentals-1_Scalability.md",
+    "title": "Scalability",
+    "description": "Scalability is a system's ability to handle growing amounts of work — more users, more data, more transactions — by adding resources rather than redesigning the architecture. A truly scalable system ma",
+    "url": "/hld/fundamentals",
+    "category": "Fundamentals",
+    "type": "hld"
+  },
+  {
+    "id": "hld-fundamentals-2_LoadBalancing.md",
+    "title": "Load Balancing",
+    "description": "Load balancing is the practice of distributing incoming network traffic across multiple servers so that no single server bears too much demand. A well-designed load balancing layer is invisible to clie",
+    "url": "/hld/fundamentals",
+    "category": "Fundamentals",
+    "type": "hld"
+  },
+  {
+    "id": "hld-fundamentals-3_Caching.md",
+    "title": "Caching",
+    "description": "Caching is the practice of storing copies of frequently accessed data in a faster storage layer so that future requests are served with lower latency and reduced load on the origin. Modern architecture",
+    "url": "/hld/fundamentals",
+    "category": "Fundamentals",
+    "type": "hld"
+  },
+  {
+    "id": "hld-fundamentals-4_CDN.md",
+    "title": "Content Delivery Network (CDN)",
+    "description": "A CDN is a globally distributed network of proxy servers that caches and serves content from edge locations closest to end users, reducing latency from hundreds of milliseconds to single-digit millisec",
+    "url": "/hld/fundamentals",
+    "category": "Fundamentals",
+    "type": "hld"
+  },
+  {
+    "id": "hld-data-systems-1_DatabaseSharding.md",
+    "title": "Database Sharding",
+    "description": "Sharding is the practice of splitting a large database into smaller, independent pieces called **shards**, each holding a subset of the total data. Every shard runs on its own server (or cluster), so r",
+    "url": "/hld/data-systems",
+    "category": "Data Systems",
+    "type": "hld"
+  },
+  {
+    "id": "hld-data-systems-2_Replication.md",
+    "title": "Replication & Failover",
+    "description": "title: \"Replication & Failover\"",
+    "url": "/hld/data-systems",
+    "category": "Data Systems",
+    "type": "hld"
+  },
+  {
+    "id": "hld-data-systems-3_SQLvsNoSQL.md",
+    "title": "SQL vs NoSQL",
+    "description": "Choosing between SQL and NoSQL is not about which is \"better\" — it's about which data model, consistency guarantees, and scaling characteristics match your workload. SQL databases (PostgreSQL, MySQL) e",
+    "url": "/hld/data-systems",
+    "category": "Data Systems",
+    "type": "hld"
+  },
+  {
+    "id": "hld-data-systems-4_DataPartitioning.md",
+    "title": "Data Partitioning",
+    "description": "Data partitioning (also called **partitioning** or **sharding** at the storage layer) divides a dataset into smaller chunks distributed across multiple nodes so that queries and writes can be paralleli",
+    "url": "/hld/data-systems",
+    "category": "Data Systems",
+    "type": "hld"
+  },
+  {
+    "id": "hld-distributed-systems-1_CAPTheorem.md",
+    "title": "CAP Theorem",
+    "description": "category: \"Distributed Systems\"",
+    "url": "/hld/distributed-systems",
+    "category": "Distributed Systems",
+    "type": "hld"
+  },
+  {
+    "id": "hld-distributed-systems-2_Consensus.md",
+    "title": "Consensus Algorithms",
+    "description": "category: \"Distributed Systems\"",
+    "url": "/hld/distributed-systems",
+    "category": "Distributed Systems",
+    "type": "hld"
+  },
+  {
+    "id": "hld-distributed-systems-3_DistributedTransactions.md",
+    "title": "Distributed Transactions",
+    "description": "title: \"Distributed Transactions\"",
+    "url": "/hld/distributed-systems",
+    "category": "Distributed Systems",
+    "type": "hld"
+  },
+  {
+    "id": "hld-distributed-systems-4_ServiceDiscovery.md",
+    "title": "Service Discovery",
+    "description": "category: \"Distributed Systems\"",
+    "url": "/hld/distributed-systems",
+    "category": "Distributed Systems",
+    "type": "hld"
+  },
+  {
+    "id": "hld-architecture-1_Microservices.md",
+    "title": "Microservices Architecture",
+    "description": "title: \"Microservices Architecture\"",
+    "url": "/hld/architecture",
+    "category": "Architecture Patterns",
+    "type": "hld"
+  },
+  {
+    "id": "hld-architecture-2_EventDriven.md",
+    "title": "Event-Driven Architecture",
+    "description": "title: \"Event-Driven Architecture\"",
+    "url": "/hld/architecture",
+    "category": "Architecture Patterns",
+    "type": "hld"
+  },
+  {
+    "id": "hld-architecture-3_CQRS.md",
+    "title": "CQRS — Command Query Responsibility Segregation",
+    "description": "category: \"Architecture Patterns\"",
+    "url": "/hld/architecture",
+    "category": "Architecture Patterns",
+    "type": "hld"
+  },
+  {
+    "id": "hld-architecture-4_APIGateway.md",
+    "title": "API Gateway",
+    "description": "category: \"Architecture Patterns\"",
+    "url": "/hld/architecture",
+    "category": "Architecture Patterns",
+    "type": "hld"
+  },
+  {
+    "id": "hld-case-studies-1_URLShortener.md",
+    "title": "Design a URL Shortener",
+    "description": "title: \"Design a URL Shortener\"",
+    "url": "/hld/case-studies",
+    "category": "Case Studies",
+    "type": "hld"
+  },
+  {
+    "id": "hld-case-studies-2_ChatSystem.md",
+    "title": "Design a Chat System",
+    "description": "Building a real-time messaging platform like WhatsApp or Slack requires solving some of the hardest problems in distributed systems — persistent connections at massive scale, guaranteed message deliver",
+    "url": "/hld/case-studies",
+    "category": "Case Studies",
+    "type": "hld"
+  },
+  {
+    "id": "hld-case-studies-3_NewsFeed.md",
+    "title": "Design a News Feed",
+    "description": "The news feed — the central experience of Facebook, Twitter, and Instagram — is a personalized, ranked, real-time stream of content from people and pages a user follows. Designing it means solving fan-",
+    "url": "/hld/case-studies",
+    "category": "Case Studies",
+    "type": "hld"
+  },
+  {
+    "id": "hld-case-studies-4_VideoStreaming.md",
+    "title": "Design a Video Streaming Platform",
+    "description": "title: \"Design a Video Streaming Platform\"",
+    "url": "/hld/case-studies",
+    "category": "Case Studies",
+    "type": "hld"
+  },
+  {
+    "id": "tech-message-queues-kafka",
+    "title": "Kafka Deep Dive",
+    "description": "How Kafka achieves high throughput with partitioned, replicated logs",
+    "url": "/tech/message-queues/kafka",
+    "category": "Message Queues",
+    "type": "tech"
+  },
+  {
+    "id": "tech-message-queues-rabbitmq",
+    "title": "RabbitMQ",
+    "description": "AMQP-based message broker with exchanges, queues, and routing keys",
+    "url": "/tech/message-queues/rabbitmq",
+    "category": "Message Queues",
+    "type": "tech"
+  },
+  {
+    "id": "tech-message-queues-pulsar",
+    "title": "Apache Pulsar",
+    "description": "Multi-tenant, geo-replicated messaging and streaming system",
+    "url": "/tech/message-queues/pulsar",
+    "category": "Message Queues",
+    "type": "tech"
+  },
+  {
+    "id": "tech-message-queues-redis-streams",
+    "title": "Redis Streams",
+    "description": "Append-only log data structure built into Redis for stream processing",
+    "url": "/tech/message-queues/redis-streams",
+    "category": "Message Queues",
+    "type": "tech"
+  },
+  {
+    "id": "tech-data-processing-spark",
+    "title": "Spark Architecture",
+    "description": "In-memory distributed computation engine — RDDs, DAGs, and shuffle",
+    "url": "/tech/data-processing/spark",
+    "category": "Data Processing",
+    "type": "tech"
+  },
+  {
+    "id": "tech-data-processing-flink",
+    "title": "Apache Flink",
+    "description": "Stateful stream processing with exactly-once semantics",
+    "url": "/tech/data-processing/flink",
+    "category": "Data Processing",
+    "type": "tech"
+  },
+  {
+    "id": "tech-data-processing-hadoop",
+    "title": "Hadoop & MapReduce",
+    "description": "Distributed storage (HDFS) and batch computation with MapReduce",
+    "url": "/tech/data-processing/hadoop",
+    "category": "Data Processing",
+    "type": "tech"
+  },
+  {
+    "id": "tech-data-processing-dbt",
+    "title": "dbt (Data Build Tool)",
+    "description": "Transform data in your warehouse using SQL with dependency graphs",
+    "url": "/tech/data-processing/dbt",
+    "category": "Data Processing",
+    "type": "tech"
+  },
+  {
+    "id": "tech-consensus-coordination-raft",
+    "title": "Raft Consensus",
+    "description": "Understandable distributed consensus algorithm — leader election and log replication",
+    "url": "/tech/consensus-coordination/raft",
+    "category": "Consensus & Coordination",
+    "type": "tech"
+  },
+  {
+    "id": "tech-consensus-coordination-paxos",
+    "title": "Paxos",
+    "description": "Classic consensus algorithm for agreeing on a value in a distributed network",
+    "url": "/tech/consensus-coordination/paxos",
+    "category": "Consensus & Coordination",
+    "type": "tech"
+  },
+  {
+    "id": "tech-consensus-coordination-zookeeper",
+    "title": "ZooKeeper",
+    "description": "Centralized service for configuration, synchronization, and naming in distributed systems",
+    "url": "/tech/consensus-coordination/zookeeper",
+    "category": "Consensus & Coordination",
+    "type": "tech"
+  },
+  {
+    "id": "tech-consensus-coordination-etcd",
+    "title": "etcd",
+    "description": "Strongly consistent distributed key-value store powering Kubernetes",
+    "url": "/tech/consensus-coordination/etcd",
+    "category": "Consensus & Coordination",
+    "type": "tech"
+  },
+  {
+    "id": "tech-databases-internals-redis",
+    "title": "Redis Internals",
+    "description": "In-memory data structure store — how persistence, eviction, and clustering work",
+    "url": "/tech/databases-internals/redis",
+    "category": "Database Internals",
+    "type": "tech"
+  },
+  {
+    "id": "tech-databases-internals-postgresql",
+    "title": "PostgreSQL Internals",
+    "description": "MVCC, WAL, query planner, and VACUUM in PostgreSQL",
+    "url": "/tech/databases-internals/postgresql",
+    "category": "Database Internals",
+    "type": "tech"
+  },
+  {
+    "id": "tech-databases-internals-cassandra",
+    "title": "Cassandra",
+    "description": "Wide-column store with consistent hashing, SSTables, and tunable consistency",
+    "url": "/tech/databases-internals/cassandra",
+    "category": "Database Internals",
+    "type": "tech"
+  },
+  {
+    "id": "tech-databases-internals-rocksdb",
+    "title": "RocksDB",
+    "description": "LSM-tree-based embedded key-value store optimized for fast storage",
+    "url": "/tech/databases-internals/rocksdb",
+    "category": "Database Internals",
+    "type": "tech"
+  },
+  {
+    "id": "tech-infrastructure-kubernetes",
+    "title": "Kubernetes Internals",
+    "description": "How the control plane, scheduler, kubelet, and etcd work together",
+    "url": "/tech/infrastructure/kubernetes",
+    "category": "Infrastructure",
+    "type": "tech"
+  },
+  {
+    "id": "tech-infrastructure-docker",
+    "title": "Docker & Containers",
+    "description": "Namespaces, cgroups, layered filesystems — containers from first principles",
+    "url": "/tech/infrastructure/docker",
+    "category": "Infrastructure",
+    "type": "tech"
+  },
+  {
+    "id": "tech-infrastructure-nginx",
+    "title": "Nginx & Envoy",
+    "description": "Reverse proxy, load balancing, and service mesh sidecar patterns",
+    "url": "/tech/infrastructure/nginx",
+    "category": "Infrastructure",
+    "type": "tech"
+  },
+  {
+    "id": "tech-infrastructure-grpc",
+    "title": "gRPC",
+    "description": "Protocol Buffers, HTTP/2 streaming, and cross-language RPC",
+    "url": "/tech/infrastructure/grpc",
+    "category": "Infrastructure",
+    "type": "tech"
+  }
+]

@@ -3,6 +3,7 @@ import { useTheme } from "./ThemeProvider";
 import { Menu } from "@ark-ui/react/menu";
 import { ChevronDown, Sun, Moon, Github, Menu as MenuIcon, X, Heart } from "lucide-react";
 import { useState } from "react";
+import SearchBox from "./SearchBox";
 
 type HeaderProps = {
   menu: Record<string, any>;
@@ -29,6 +30,9 @@ export default function Header({ menu }: HeaderProps) {
         >
           {mobileMenuOpen ? <X size={20} /> : <MenuIcon size={20} />}
         </button>
+
+        {/* Search */}
+        <SearchBox />
 
         {/* Nav */}
         <nav className={`site-header__nav ${mobileMenuOpen ? "site-header__nav--open" : ""}`}>

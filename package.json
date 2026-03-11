@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "rm -rf .next && chokidar 'content/**/*.md' -c 'npx ts-node scripts/generateContent.ts' & NEXT_DEV_CACHE=false next dev",
+    "prebuild": "node scripts/build-search-index.mjs",
     "build": "npx ts-node scripts/generateContent.ts && NEXT_DISABLE_ESLINT=1 next build --no-lint",
     "start": "next start",
     "lint": "next lint",
@@ -15,6 +16,7 @@
     "@radix-ui/themes": "3.2.1",
     "@zag-js/utils": "1.5.0",
     "antd": "^5.24.4",
+    "fuse.js": "7.1.0",
     "google": "^2.1.0",
     "gray-matter": "^4.0.3",
     "highlight.js": "11.11.1",
