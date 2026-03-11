@@ -63,33 +63,9 @@ export const LLD_CATEGORIES: CategoryInfo[] = [
   },
 ];
 
-// Map slug to content file path  
-export const CONTENT_FILE_MAP: Record<string, string> = {
-  // Creational
-  "creational/singleton": "content/1_LLD/1_Creational/1_Singleton.md",
-  "creational/factory-method": "content/1_LLD/1_Creational/2_FactoryMethod.md",
-  "creational/abstract-factory": "content/1_LLD/1_Creational/3_AbstractFactory.md",
-  "creational/builder": "content/1_LLD/1_Creational/4_Builder.md",
-  "creational/prototype": "content/1_LLD/1_Creational/5_Prototype.md",
-  // Structural
-  "structural/adapter": "content/1_LLD/2_Structural/1_Adapter.md",
-  "structural/decorator": "content/1_LLD/2_Structural/2_Decorator.md",
-  "structural/facade": "content/1_LLD/2_Structural/3_Facade.md",
-  "structural/proxy": "content/1_LLD/2_Structural/4_Proxy.md",
-  "structural/composite": "content/1_LLD/2_Structural/5_Composite.md",
-  // Behavioral
-  "behavioral/observer": "content/1_LLD/3_Behavioral/1_Observer.md",
-  "behavioral/strategy": "content/1_LLD/3_Behavioral/2_Strategy.md",
-  "behavioral/command": "content/1_LLD/3_Behavioral/3_Command.md",
-  "behavioral/state": "content/1_LLD/3_Behavioral/4_State.md",
-  "behavioral/template-method": "content/1_LLD/3_Behavioral/5_TemplateMethod.md",
-  // SOLID
-  "solid/single-responsibility": "content/1_LLD/4_SOLID/1_SRP.md",
-  "solid/open-closed": "content/1_LLD/4_SOLID/2_OCP.md",
-  "solid/liskov-substitution": "content/1_LLD/4_SOLID/3_LSP.md",
-  "solid/interface-segregation": "content/1_LLD/4_SOLID/4_ISP.md",
-  "solid/dependency-inversion": "content/1_LLD/4_SOLID/5_DIP.md",
-};
+// Map slug to content file path (legacy — kept for backward compatibility)
+// All patterns now use interactive PatternData from lib/patterns/index.ts
+export const CONTENT_FILE_MAP: Record<string, string> = {};
 
 export function getCategoryBySlug(slug: string): CategoryInfo | undefined {
   return LLD_CATEGORIES.find((c) => c.slug === slug);

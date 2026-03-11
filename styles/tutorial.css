@@ -562,7 +562,7 @@
 
 /* Language tabs for code blocks */
 .onepagebit pre.hljs {
-  background: var(--pre-bg);
+  background: #0d1117;
   color: #c9d1d9;
   padding: 16px 20px;
   border-radius: 8px;
@@ -571,7 +571,7 @@
   font-size: 13px;
   line-height: 1.6;
   margin: 16px 0;
-  border: 1px solid var(--pre-border);
+  border: 1px solid #30363d;
 }
 
 .onepagebit pre.hljs code {

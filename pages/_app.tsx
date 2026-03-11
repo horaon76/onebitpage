@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import "@radix-ui/themes/styles.css";
 import "@/styles/global.css";
 import "@/styles/tutorial.css";
+import "@/styles/pattern-page.css";
 import { Theme } from "@radix-ui/themes";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
