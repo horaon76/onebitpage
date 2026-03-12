@@ -214,31 +214,27 @@ const singletonData: PatternData = {
         "A payment processing platform connects to multiple acquirers (Visa, Mastercard, local banks). Gateway credentials, retry policies, and routing rules must be loaded once from a secure vault and shared across all transaction handlers. Creating multiple config instances risks stale credentials and race conditions during hot-reload.",
       solution:
         "A Singleton PaymentGatewayConfig loads credentials at startup, exposes them read-only, and handles atomic hot-reload. Singleton enforcement differs by language in the examples: Python and Java use guarded lazy initialization (double-check style), Go uses sync.Once, TypeScript uses a private constructor plus static cached instance, and Rust uses OnceLock::get_or_init. In every case, transaction handlers resolve configuration through one shared instance so routing and retry policy remain consistent.",
-      classDiagramSvg: `<svg viewBox="0 0 460 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px">
-  <style>
-    .s-box { rx:6; }
-    .s-title { font: bold 10px 'JetBrains Mono', monospace; }
-    .s-member { font: 9px 'JetBrains Mono', monospace; }
-    .s-label { font: 8px 'JetBrains Mono', monospace; }
-    .s-arr { stroke-width:1.2; fill:none; marker-end:url(#s-arr2); }
-  </style>
-  <defs><marker id="s-arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" class="s-arrow-head"/></marker></defs>
-  <rect x="120" y="10" width="220" height="100" class="s-box s-diagram-box"/>
-  <text x="230" y="28" text-anchor="middle" class="s-title s-diagram-title">PaymentGatewayConfig</text>
-  <line x1="120" y1="32" x2="340" y2="32" class="s-diagram-line"/>
-  <text x="130" y="46" class="s-member s-diagram-member">-instance: PaymentGatewayConfig</text>
-  <text x="130" y="58" class="s-member s-diagram-member">-apiKey, gatewayUrl, retryLimit</text>
-  <line x1="120" y1="64" x2="340" y2="64" class="s-diagram-line"/>
-  <text x="130" y="78" class="s-member s-diagram-member">+getInstance(): PaymentGatewayConfig</text>
-  <text x="130" y="90" class="s-member s-diagram-member">-loadFromVault(): void</text>
-  <text x="130" y="102" class="s-member s-diagram-member">+getGatewayUrl(): string</text>
-  <rect x="5" y="132" width="140" height="36" class="s-box s-diagram-box"/>
-  <text x="75" y="154" text-anchor="middle" class="s-title s-diagram-title">TransactionHandler</text>
-  <rect x="315" y="132" width="140" height="36" class="s-box s-diagram-box"/>
-  <text x="385" y="154" text-anchor="middle" class="s-title s-diagram-title">RefundProcessor</text>
-  <line x1="75" y1="132" x2="200" y2="110" class="s-arr s-diagram-arrow"/>
-  <line x1="385" y1="132" x2="280" y2="110" class="s-arr s-diagram-arrow"/>
-</svg>`,
+      classDiagramSvg: {
+        type: "mermaid",
+        content: `classDiagram
+  class PaymentGatewayConfig {
+    <<singleton>>
+    -instance: PaymentGatewayConfig$
+    -apiKey: string
+    -gatewayUrl: string
+    -retryLimit: int
+    +getInstance()$ PaymentGatewayConfig
+    +getGatewayUrl() string
+    +getRetryLimit() int
+    -loadFromVault() void
+  }
+  class TransactionHandler {
+    +charge(amountCents, cardToken) Receipt
+    +refund(txId, amount) Refund
+    +authorize(amountCents, currency) string
+  }
+  TransactionHandler ..> PaymentGatewayConfig : uses`,
+      },
       code: {
         Python: `import threading
 
@@ -276,13 +272,50 @@ class PaymentGatewayConfig:
         self.gateway_url = "https://acquirer.bank/api/v2"
         self.retry_limit = 5
 
-# ── Usage ──
-# Both handlers receive the exact same config object
-config = PaymentGatewayConfig.get_instance()
-print(config.gateway_url, config.retry_limit)
+class TransactionHandler:
+    """
+    Consumer — processes payments using the shared PaymentGatewayConfig singleton.
+    Calls get_instance() on every transaction rather than caching the reference
+    at construction time; this allows the config to be hot-reloaded between
+    requests (e.g., key rotation) without restarting the service.
+    Never calls PaymentGatewayConfig() directly — always goes through getInstance.
+    """
 
-same_config = PaymentGatewayConfig.get_instance()
-assert config is same_config  # True — proves singleton`,
+    def charge(self, amount_cents: int, card_token: str) -> dict:
+        """Authorize and capture a payment via the configured acquirer endpoint."""
+        cfg = PaymentGatewayConfig.get_instance()
+        # In production: POST cfg.gateway_url with Authorization: cfg.api_key
+        return {
+            "status": "authorized",
+            "gateway": cfg.gateway_url,
+            "amount_cents": amount_cents,
+            "card_token": card_token[:8] + "****",
+            "retry_limit": cfg.retry_limit,
+        }
+
+    def refund(self, tx_id: str, amount_cents: int) -> dict:
+        """Reverse a previous charge through the same acquirer endpoint."""
+        cfg = PaymentGatewayConfig.get_instance()
+        return {
+            "status": "refunded",
+            "gateway": cfg.gateway_url,
+            "original_tx": tx_id,
+            "amount_cents": amount_cents,
+        }
+
+    def authorize(self, amount_cents: int, currency: str) -> dict:
+        """Pre-authorize a hold without capturing — used for hotel/car bookings."""
+        cfg = PaymentGatewayConfig.get_instance()
+        return {"status": "hold", "gateway": cfg.gateway_url, "currency": currency}
+
+
+# ── Usage ──
+handler = TransactionHandler()
+print(handler.charge(5000, "tok_visa_4242"))
+print(handler.refund("TX-001", 1500))
+print(handler.authorize(20000, "USD"))
+# Both calls resolve to the exact same config object
+assert PaymentGatewayConfig.get_instance() is PaymentGatewayConfig.get_instance()`,
         Go: `package main
 
 import (
@@ -1082,32 +1115,27 @@ fn main() {
         "A hospital's EHR system must connect to HL7 FHIR endpoints, lab integrations, and pharmacy systems using a unified configuration. Multiple configuration instances could serve different versions of endpoint URLs, violating HIPAA audit requirements for consistent access logging.",
       solution:
         "A Singleton EHRSystemConfig is initialized once from the hospital's configuration server, ensuring all modules — scheduling, charting, prescriptions — read the same FHIR base URL, TLS settings, and facility identifiers. The language implementations achieve this with thread-safe lazy init in Python/Java, sync.Once in Go, private constructor + static cache in TypeScript, and OnceLock in Rust. The result is a single authoritative configuration view that supports consistent audit and compliance behavior.",
-      classDiagramSvg: `<svg viewBox="0 0 460 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px">
-  <style>
-    .s-box { rx:6; }
-    .s-title { font: bold 10px 'JetBrains Mono', monospace; }
-    .s-member { font: 9px 'JetBrains Mono', monospace; }
-    .s-arr { stroke-width:1.2; fill:none; marker-end:url(#s-arr3); }
-  </style>
-  <defs><marker id="s-arr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" class="s-arrow-head"/></marker></defs>
-  <rect x="120" y="10" width="220" height="90" class="s-box s-diagram-box"/>
-  <text x="230" y="28" text-anchor="middle" class="s-title s-diagram-title">EHRSystemConfig</text>
-  <line x1="120" y1="32" x2="340" y2="32" class="s-diagram-line"/>
-  <text x="130" y="46" class="s-member s-diagram-member">-fhirBaseUrl, facilityId, tlsCertPath</text>
-  <line x1="120" y1="52" x2="340" y2="52" class="s-diagram-line"/>
-  <text x="130" y="66" class="s-member s-diagram-member">+getInstance(): EHRSystemConfig</text>
-  <text x="130" y="78" class="s-member s-diagram-member">-loadConfig(): void</text>
-  <text x="130" y="90" class="s-member s-diagram-member">+getFhirBaseUrl(): string</text>
-  <rect x="5" y="126" width="100" height="36" class="s-box s-diagram-box"/>
-  <text x="55" y="148" text-anchor="middle" class="s-title s-diagram-title">Scheduling</text>
-  <rect x="180" y="126" width="100" height="36" class="s-box s-diagram-box"/>
-  <text x="230" y="148" text-anchor="middle" class="s-title s-diagram-title">Charting</text>
-  <rect x="355" y="126" width="100" height="36" class="s-box s-diagram-box"/>
-  <text x="405" y="148" text-anchor="middle" class="s-title s-diagram-title">Prescriptions</text>
-  <line x1="55" y1="126" x2="190" y2="100" class="s-arr s-diagram-arrow"/>
-  <line x1="230" y1="126" x2="230" y2="100" class="s-arr s-diagram-arrow"/>
-  <line x1="405" y1="126" x2="280" y2="100" class="s-arr s-diagram-arrow"/>
-</svg>`,
+      classDiagramSvg: {
+        type: "mermaid",
+        content: `classDiagram
+  class EHRSystemConfig {
+    <<singleton>>
+    -instance: EHRSystemConfig$
+    -fhirBaseUrl: string
+    -facilityId: string
+    -tlsCertPath: string
+    +getInstance()$ EHRSystemConfig
+    +getFhirBaseUrl() string
+    +getFacilityId() string
+    -loadConfig() void
+  }
+  class AppointmentService {
+    +bookAppointment(patientId, slotId) dict
+    +cancelAppointment(apptId) dict
+    +validateFhirEndpoint() boolean
+  }
+  AppointmentService ..> EHRSystemConfig : uses`,
+      },
       code: {
         Python: `import threading
 
@@ -1142,9 +1170,46 @@ class EHRSystemConfig:
         self.facility_id = "HOSP-NE-0042"
         self.tls_cert_path = "/etc/ssl/ehr/client.pem"
 
+class AppointmentService:
+    """
+    Consumer — books and cancels appointments using the shared EHRSystemConfig.
+    Resolves the FHIR base URL from the singleton on every call so the service
+    always uses the current HIPAA-compliant endpoint even after a config reload.
+    Never stores the config as an instance field — always calls get_instance().
+    """
+
+    def book_appointment(self, patient_id: str, slot_id: str) -> dict:
+        """Write an Appointment resource to the FHIR server."""
+        cfg = EHRSystemConfig.get_instance()
+        endpoint = f"{cfg.fhir_base_url}/Appointment"
+        # In production: POST to endpoint with TLS cert at cfg.tls_cert_path
+        return {
+            "patient_id": patient_id,
+            "slot_id": slot_id,
+            "fhir_endpoint": endpoint,
+            "facility": cfg.facility_id,
+            "status": "booked",
+        }
+
+    def cancel_appointment(self, appt_id: str) -> dict:
+        """PATCH the Appointment resource status to 'cancelled'."""
+        cfg = EHRSystemConfig.get_instance()
+        endpoint = f"{cfg.fhir_base_url}/Appointment/{appt_id}"
+        return {"appt_id": appt_id, "endpoint": endpoint, "status": "cancelled"}
+
+    def validate_fhir_endpoint(self) -> bool:
+        """Ping the FHIR base URL to confirm the config is pointing at a live server."""
+        cfg = EHRSystemConfig.get_instance()
+        return cfg.fhir_base_url.startswith("https://")
+
+
 # ── Usage ──
-cfg = EHRSystemConfig.get_instance()
-print(cfg.fhir_base_url, cfg.facility_id)`,
+svc = AppointmentService()
+print(svc.book_appointment("PAT-0042", "SLOT-AM-08:30"))
+print(svc.cancel_appointment("APPT-7731"))
+print(svc.validate_fhir_endpoint())
+# All three calls resolved the same EHRSystemConfig instance
+assert EHRSystemConfig.get_instance() is EHRSystemConfig.get_instance()`,
         Go: `package main
 
 import (
@@ -1779,29 +1844,25 @@ fn main() {
         "An e-commerce platform with millions of SKUs needs a centralized in-memory cache for inventory counts. Multiple cache instances would cause overselling during flash sales because each instance could hold stale stock counts independently.",
       solution:
         "A Singleton InventoryCacheManager maintains a single source of truth for stock levels, backed by Redis, and provides thread-safe decrement operations during checkout. In the language examples, singleton creation is controlled via a guarded static instance (Python/Java/TypeScript), sync.Once (Go), or OnceLock (Rust), while mutation safety is handled with locks or atomic structures. This combination prevents split-brain stock views and reduces overselling risk.",
-      classDiagramSvg: `<svg viewBox="0 0 460 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px">
-  <style>
-    .s-box { rx:6; }
-    .s-title { font: bold 10px 'JetBrains Mono', monospace; }
-    .s-member { font: 9px 'JetBrains Mono', monospace; }
-    .s-arr { stroke-width:1.2; fill:none; marker-end:url(#s-arr4); }
-  </style>
-  <defs><marker id="s-arr4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" class="s-arrow-head"/></marker></defs>
-  <rect x="110" y="10" width="240" height="90" class="s-box s-diagram-box"/>
-  <text x="230" y="28" text-anchor="middle" class="s-title s-diagram-title">InventoryCacheManager</text>
-  <line x1="110" y1="32" x2="350" y2="32" class="s-diagram-line"/>
-  <text x="120" y="46" class="s-member s-diagram-member">-stock: Map&lt;SKU, count&gt;</text>
-  <line x1="110" y1="52" x2="350" y2="52" class="s-diagram-line"/>
-  <text x="120" y="66" class="s-member s-diagram-member">+getInstance(): InventoryCacheManager</text>
-  <text x="120" y="78" class="s-member s-diagram-member">+reserveStock(sku, qty): boolean</text>
-  <text x="120" y="90" class="s-member s-diagram-member">-warmCache(): void</text>
-  <rect x="5" y="126" width="130" height="36" class="s-box s-diagram-box"/>
-  <text x="70" y="148" text-anchor="middle" class="s-title s-diagram-title">CheckoutService</text>
-  <rect x="325" y="126" width="130" height="36" class="s-box s-diagram-box"/>
-  <text x="390" y="148" text-anchor="middle" class="s-title s-diagram-title">CartService</text>
-  <line x1="70" y1="126" x2="200" y2="100" class="s-arr s-diagram-arrow"/>
-  <line x1="390" y1="126" x2="280" y2="100" class="s-arr s-diagram-arrow"/>
-</svg>`,
+      classDiagramSvg: {
+        type: "mermaid",
+        content: `classDiagram
+  class InventoryCacheManager {
+    <<singleton>>
+    -instance: InventoryCacheManager$
+    -stock: Map~string, int~
+    +getInstance()$ InventoryCacheManager
+    +reserveStock(sku, qty) boolean
+    +getStock(sku) int
+    -warmCache() void
+  }
+  class CheckoutService {
+    +purchase(cart, userId) Order
+    +reserveItems(sku, qty) boolean
+    +rollbackReservation(sku, qty) void
+  }
+  CheckoutService ..> InventoryCacheManager : uses`,
+      },
       code: {
         Python: `import threading
 from typing import Dict
@@ -1845,10 +1906,43 @@ class InventoryCacheManager:
                 return True
             return False
 
+class CheckoutService:
+    """
+    Consumer — coordinates cart checkout against the singleton inventory cache.
+    Reserves every item in the cart before proceeding to payment.
+    Uses InventoryCacheManager.get_instance() per call so it always reads
+    live stock counts — never a snapshot from object construction time.
+    Rolls back already-reserved items if any reservation fails mid-cart.
+    """
+
+    def purchase(self, cart: list[dict], user_id: str) -> dict:
+        """Reserve all cart items atomically, then confirm the order."""
+        cache = InventoryCacheManager.get_instance()
+        reserved: list[dict] = []
+        for item in cart:
+            if not cache.reserve_stock(item["sku"], item["qty"]):
+                # Compensation: restore already-reserved stock before failing
+                for r in reserved:
+                    cache.reserve_stock(r["sku"], -r["qty"])  # negative qty = restore
+                return {"status": "out_of_stock", "failed_sku": item["sku"]}
+            reserved.append(item)
+        return {
+            "status": "purchased",
+            "user_id": user_id,
+            "items": [i["sku"] for i in cart],
+        }
+
+    def reserve_items(self, sku: str, qty: int) -> bool:
+        """Reserve a single SKU — used by the cart preview to check availability."""
+        return InventoryCacheManager.get_instance().reserve_stock(sku, qty)
+
+
 # ── Usage ──
-cache = InventoryCacheManager.get_instance()
-print(cache.reserve_stock("SKU-8821", 2))   # True
-print(cache.reserve_stock("SKU-7763", 1))   # False — out of stock`,
+svc = CheckoutService()
+cart = [{"sku": "SKU-8821", "qty": 2}, {"sku": "SKU-4410", "qty": 1}]
+print(svc.purchase(cart, "USER-991"))
+print(svc.reserve_items("SKU-7763", 1))   # False — out of stock
+assert InventoryCacheManager.get_instance() is InventoryCacheManager.get_instance()`,
         Go: `package main
 
 import (
@@ -2683,32 +2777,27 @@ fn main() {
         "A streaming service delivers content through multiple CDN edge nodes. Each microservice (transcoder, DRM licenser, manifest generator) must reference the same CDN origin URL, signing keys, and edge-selection policy. Divergent configs cause broken playback and cache-miss storms.",
       solution:
         "A Singleton CDNConfig holds the authoritative CDN topology and signing credentials, loaded once from a central config store and used by all streaming pipeline components. Across languages, singleton construction is intentionally one-time: double-check style lazy init in Python/Java, sync.Once in Go, static cached instance with private constructor in TypeScript, and OnceLock in Rust. This ensures transcoder, DRM, and manifest services read identical origin and edge policy data.",
-      classDiagramSvg: `<svg viewBox="0 0 460 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px">
-  <style>
-    .s-box { rx:6; }
-    .s-title { font: bold 10px 'JetBrains Mono', monospace; }
-    .s-member { font: 9px 'JetBrains Mono', monospace; }
-    .s-arr { stroke-width:1.2; fill:none; marker-end:url(#s-arr5); }
-  </style>
-  <defs><marker id="s-arr5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" class="s-arrow-head"/></marker></defs>
-  <rect x="130" y="10" width="200" height="90" class="s-box s-diagram-box"/>
-  <text x="230" y="28" text-anchor="middle" class="s-title s-diagram-title">CDNConfig</text>
-  <line x1="130" y1="32" x2="330" y2="32" class="s-diagram-line"/>
-  <text x="140" y="46" class="s-member s-diagram-member">-originUrl, signingKey, edgePolicy</text>
-  <line x1="130" y1="52" x2="330" y2="52" class="s-diagram-line"/>
-  <text x="140" y="66" class="s-member s-diagram-member">+getInstance(): CDNConfig</text>
-  <text x="140" y="78" class="s-member s-diagram-member">+getOriginUrl(): string</text>
-  <text x="140" y="90" class="s-member s-diagram-member">+getEdgePolicy(): string</text>
-  <rect x="5" y="126" width="100" height="36" class="s-box s-diagram-box"/>
-  <text x="55" y="148" text-anchor="middle" class="s-title s-diagram-title">Transcoder</text>
-  <rect x="180" y="126" width="100" height="36" class="s-box s-diagram-box"/>
-  <text x="230" y="148" text-anchor="middle" class="s-title s-diagram-title">DRMLicenser</text>
-  <rect x="355" y="126" width="100" height="36" class="s-box s-diagram-box"/>
-  <text x="405" y="148" text-anchor="middle" class="s-title s-diagram-title">ManifestGen</text>
-  <line x1="55" y1="126" x2="195" y2="100" class="s-arr s-diagram-arrow"/>
-  <line x1="230" y1="126" x2="230" y2="100" class="s-arr s-diagram-arrow"/>
-  <line x1="405" y1="126" x2="280" y2="100" class="s-arr s-diagram-arrow"/>
-</svg>`,
+      classDiagramSvg: {
+        type: "mermaid",
+        content: `classDiagram
+  class CDNConfig {
+    <<singleton>>
+    -instance: CDNConfig$
+    -originUrl: string
+    -signingKey: string
+    -edgePolicy: string
+    +getInstance()$ CDNConfig
+    +getOriginUrl() string
+    +getEdgePolicy() string
+    -loadConfig() void
+  }
+  class StreamingPipeline {
+    +buildManifest(assetId, quality) string
+    +signUrl(path) string
+    +selectEdge(region) string
+  }
+  StreamingPipeline ..> CDNConfig : uses`,
+      },
       code: {
         Python: `import threading
 
@@ -2742,9 +2831,39 @@ class CDNConfig:
         self.signing_key = "cdnkey_prod_9f3a1b"
         self.edge_policy = "latency-optimized"
 
+class StreamingPipeline:
+    """
+    Consumer — builds video manifests and signs URLs using the CDNConfig singleton.
+    Reads origin URL, signing key, and edge policy directly from the singleton so
+    every pipeline instance automatically picks up config changes (e.g., edge
+    policy rotation during a DDoS incident) without a service restart.
+    Never holds a reference to CDNConfig — always calls get_instance() per method.
+    """
+
+    def build_manifest(self, asset_id: str, quality: str) -> str:
+        """Construct an HLS/DASH manifest URL for the requested asset and quality tier."""
+        cdn = CDNConfig.get_instance()
+        return f"{cdn.origin_url}/manifests/{asset_id}/{quality}/index.m3u8"
+
+    def sign_url(self, path: str) -> str:
+        """Produce a time-limited signed URL using the CDN signing key."""
+        cdn = CDNConfig.get_instance()
+        # In production: HMAC-SHA256(signing_key, path + expiry_ts)
+        token = hash(cdn.signing_key + path) & 0xFFFFFFFF  # simplified
+        return f"{cdn.origin_url}{path}?token={token:08x}"
+
+    def select_edge(self, region: str) -> str:
+        """Apply the current edge policy to resolve the nearest PoP for a region."""
+        cdn = CDNConfig.get_instance()
+        return f"{region}.edge.{cdn.origin_url.split('//')[-1]} [policy={cdn.edge_policy}]"
+
+
 # ── Usage ──
-cdn = CDNConfig.get_instance()
-print(cdn.origin_url, cdn.edge_policy)`,
+pipeline = StreamingPipeline()
+print(pipeline.build_manifest("ASSET-0042", "1080p"))
+print(pipeline.sign_url("/hls/ASSET-0042/index.m3u8"))
+print(pipeline.select_edge("eu-west"))
+assert CDNConfig.get_instance() is CDNConfig.get_instance()`,
         Go: `package main
 
 import (
@@ -3389,29 +3508,24 @@ fn main() {
         "A logistics company tracks thousands of delivery vehicles in real time. Multiple tracking coordinator instances would produce duplicate GPS event processing, conflicting ETAs, and inconsistent driver assignments across dispatching modules.",
       solution:
         "A Singleton FleetTrackingCoordinator centralizes vehicle position ingestion, de-duplicates GPS pings, and provides a single consistent view of fleet state to all dispatch and routing services. Each language example shows one-instance construction with thread-safe guards: lock-protected lazy creation (Python/Java), sync.Once (Go), static cached instance (TypeScript), and OnceLock (Rust). That single coordinator prevents diverging ETA calculations and conflicting dispatch decisions.",
-      classDiagramSvg: `<svg viewBox="0 0 460 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px">
-  <style>
-    .s-box { rx:6; }
-    .s-title { font: bold 10px 'JetBrains Mono', monospace; }
-    .s-member { font: 9px 'JetBrains Mono', monospace; }
-    .s-arr { stroke-width:1.2; fill:none; marker-end:url(#s-arr6); }
-  </style>
-  <defs><marker id="s-arr6" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" class="s-arrow-head"/></marker></defs>
-  <rect x="100" y="10" width="260" height="90" class="s-box s-diagram-box"/>
-  <text x="230" y="28" text-anchor="middle" class="s-title s-diagram-title">FleetTrackingCoordinator</text>
-  <line x1="100" y1="32" x2="360" y2="32" class="s-diagram-line"/>
-  <text x="110" y="46" class="s-member s-diagram-member">-positions: Map&lt;vehicleId, GeoPos&gt;</text>
-  <line x1="100" y1="52" x2="360" y2="52" class="s-diagram-line"/>
-  <text x="110" y="66" class="s-member s-diagram-member">+getInstance(): FleetTrackingCoordinator</text>
-  <text x="110" y="78" class="s-member s-diagram-member">+updatePosition(id, lat, lng): void</text>
-  <text x="110" y="90" class="s-member s-diagram-member">+getPosition(id): GeoPosition</text>
-  <rect x="5" y="126" width="120" height="36" class="s-box s-diagram-box"/>
-  <text x="65" y="148" text-anchor="middle" class="s-title s-diagram-title">DispatchService</text>
-  <rect x="335" y="126" width="120" height="36" class="s-box s-diagram-box"/>
-  <text x="395" y="148" text-anchor="middle" class="s-title s-diagram-title">RoutingEngine</text>
-  <line x1="65" y1="126" x2="195" y2="100" class="s-arr s-diagram-arrow"/>
-  <line x1="395" y1="126" x2="290" y2="100" class="s-arr s-diagram-arrow"/>
-</svg>`,
+      classDiagramSvg: {
+        type: "mermaid",
+        content: `classDiagram
+  class FleetTrackingCoordinator {
+    <<singleton>>
+    -instance: FleetTrackingCoordinator$
+    -positions: Map~string, GeoPos~
+    +getInstance()$ FleetTrackingCoordinator
+    +updatePosition(id, lat, lng) void
+    +getPosition(vehicleId) GeoPos
+  }
+  class DispatchService {
+    +assignDriver(orderId, vehicleId) string
+    +getEta(vehicleId, destination) int
+    +findNearestVehicle(lat, lng) string
+  }
+  DispatchService ..> FleetTrackingCoordinator : uses`,
+      },
       code: {
         Python: `import threading
 from typing import Dict, Tuple
@@ -3447,10 +3561,54 @@ class FleetTrackingCoordinator:
         """Retrieve last-known position. Returns (0,0) if unknown."""
         return self._positions.get(vehicle_id, (0.0, 0.0))
 
+class DispatchService:
+    """
+    Consumer — assigns drivers and computes ETAs using the singleton fleet tracker.
+    Calls FleetTrackingCoordinator.get_instance() per method so it always reads
+    the latest GPS positions — positions update every few seconds from the vehicle
+    telematics stream, and any cached reference would become stale immediately.
+    Never calls FleetTrackingCoordinator() directly — always goes through getInstance.
+    """
+
+    def assign_driver(self, order_id: str, vehicle_id: str) -> str:
+        """Pin an order to a vehicle after confirming the vehicle is currently active."""
+        tracker = FleetTrackingCoordinator.get_instance()
+        position = tracker.get_position(vehicle_id)
+        if position is None:
+            return f"vehicle {vehicle_id} offline — cannot assign"
+        return f"order={order_id} assigned to vehicle={vehicle_id} at {position}"
+
+    def get_eta(self, vehicle_id: str, destination: tuple[float, float]) -> int:
+        """Estimate minutes to destination using straight-line distance as a proxy."""
+        tracker = FleetTrackingCoordinator.get_instance()
+        pos = tracker.get_position(vehicle_id)
+        if pos is None:
+            return -1
+        dlat = abs(pos[0] - destination[0])
+        dlng = abs(pos[1] - destination[1])
+        return int((dlat + dlng) * 111)  # ~111 km per degree → simplified minutes
+
+    def find_nearest_vehicle(self, lat: float, lng: float) -> str:
+        """Scan all tracked vehicles and return the closest one to the given point."""
+        tracker = FleetTrackingCoordinator.get_instance()
+        nearest, min_dist = None, float("inf")
+        for vid, pos in tracker._positions.items():
+            dist = abs(pos[0] - lat) + abs(pos[1] - lng)
+            if dist < min_dist:
+                min_dist, nearest = dist, vid
+        return nearest or "no vehicles online"
+
+
 # ── Usage ──
 tracker = FleetTrackingCoordinator.get_instance()
 tracker.update_position("TRK-4491", 40.7128, -74.0060)
-print(tracker.get_position("TRK-4491"))  # (40.7128, -74.006)`,
+tracker.update_position("TRK-5502", 40.7580, -73.9855)
+
+dispatch = DispatchService()
+print(dispatch.assign_driver("ORD-8821", "TRK-4491"))
+print(dispatch.get_eta("TRK-4491", (40.7580, -73.9855)))
+print(dispatch.find_nearest_vehicle(40.730, -74.000))
+assert FleetTrackingCoordinator.get_instance() is FleetTrackingCoordinator.get_instance()`,
         Go: `package main
 
 import (

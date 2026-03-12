@@ -277,15 +277,10 @@ function ExampleDetail({ ex }: { ex: PatternExample }) {
         </div>
       </div>
 
-      {/* Class Diagram — simple static view, no zoom controls */}
+      {/* Class Diagram with zoom/pan controls */}
       <div className="pp-section">
         <h3 className="pp-h3">Class Diagram</h3>
-        {(() => {
-          const d = normalizeDiagram(ex.classDiagramSvg);
-          return d.type === "mermaid"
-            ? <MermaidDiagram content={d.content} className="pp-diagram-static" />
-            : <div className="pp-diagram-static" dangerouslySetInnerHTML={{ __html: d.content }} />;
-        })()}
+        <DiagramViewer diagram={ex.classDiagramSvg} />
       </div>
 
       {/* Code */}
@@ -426,12 +421,7 @@ function VariantDetail({ variant }: { variant: PatternVariant }) {
               {variant.diagramExplanation}
             </p>
           )}
-          {(() => {
-            const d = normalizeDiagram(variant.classDiagramSvg);
-            return d.type === "mermaid"
-              ? <MermaidDiagram content={d.content} className="pp-diagram-static" />
-              : <div className="pp-diagram-static" dangerouslySetInnerHTML={{ __html: d.content }} />;
-          })()}
+          <DiagramViewer diagram={variant.classDiagramSvg} />
         </div>
       )}
 
