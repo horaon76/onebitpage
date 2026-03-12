@@ -31,9 +31,6 @@ export default function Header({ menu }: HeaderProps) {
           {mobileMenuOpen ? <X size={20} /> : <MenuIcon size={20} />}
         </button>
 
-        {/* Search */}
-        <SearchBox />
-
         {/* Nav */}
         <nav className={`site-header__nav ${mobileMenuOpen ? "site-header__nav--open" : ""}`}>
           {/* Design Patterns (LLD) */}
@@ -118,6 +115,11 @@ export default function Header({ menu }: HeaderProps) {
           <Link href="/games" className="site-header__nav-link" onClick={() => setMobileMenuOpen(false)}>
             Games
           </Link>
+
+          {/* Search — lives here so it flows naturally in the flex row */}
+          <div className="site-header__search-wrap">
+            <SearchBox />
+          </div>
 
           {/* Right section */}
           <div className="site-header__actions">

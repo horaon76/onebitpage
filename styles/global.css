@@ -219,16 +219,22 @@ button {
   align-items: center;
   padding: 0 24px;
   gap: 8px;
-  position: relative;
 }
 
 /* ── Search Box ─────────────────────────────────── */
+/* Wrapper sits inside .site-header__nav as a proper flex child */
+.site-header__search-wrap {
+  flex: 1 1 0;
+  min-width: 120px;
+  max-width: 340px;
+  display: flex;
+  align-items: center;
+  margin: 0 8px;
+}
+
+/* SearchBox root element — fills its wrapper, no absolute positioning */
 .site-header__search {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 320px;
-  z-index: 50;
+  width: 100%;
 }
 
 .sb-wrap {
@@ -440,11 +446,20 @@ button {
   color: var(--text-tertiary, #555);
 }
 
-/* Mobile: hide absolutely-positioned search on small screens,
-   it will overlap nav — header handles its own layout */
+/* Mobile: the search wrap is hidden when nav is collapsed;
+   it becomes visible once the nav drawer opens (--open class) */
 @media (max-width: 768px) {
-  .site-header__search {
+  .site-header__search-wrap {
     display: none;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .site-header__nav--open .site-header__search-wrap {
+    display: flex;
+    order: -1; /* search appears at top of mobile menu */
+    padding: 8px 0 4px;
   }
 }
 

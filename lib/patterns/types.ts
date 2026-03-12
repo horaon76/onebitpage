@@ -27,14 +27,59 @@ export interface CodeBlock {
   Rust: string;
 }
 
+/**
+ * Discriminated union covering inline SVG strings and Mermaid diagram definitions.
+ * - `{ type: 'svg'; content: string }` — raw inline SVG markup
+ * - `{ type: 'mermaid'; content: string }` — Mermaid diagram definition
+ *
+ * Plain strings are also accepted everywhere and treated as inline SVG for
+ * backwards-compatibility with existing pattern files.
+ */
+export type ClassDiagram =
+  | { type: 'svg'; content: string }
+  | { type: 'mermaid'; content: string };
+
+/**
+ * A single source file shown inside the file-explorer sidebar.
+ * `dir` is the folder displayed in the tree (e.g. "src/config/" or "/" for root).
+ */
+export interface CodeFile {
+  /** File name shown in the sidebar, e.g. "app_config.py" */
+  name: string;
+  /** Directory prefix shown as a folder node, e.g. "src/" or "/" */
+  dir?: string;
+  /** Full file content */
+  content: string;
+}
+
+/**
+ * Per-language set of source files used by the file-explorer sidebar.
+ * When a `PatternVariant` provides this field the UI renders a
+ * left-sidebar file tree + right-panel code view instead of a plain code block.
+ */
+export interface MultiFileCodeBlock {
+  Python: CodeFile[];
+  Go: CodeFile[];
+  Java: CodeFile[];
+  TypeScript: CodeFile[];
+  Rust: CodeFile[];
+}
+
 export interface PatternExample {
   id: number;
   title: string;
   domain: string; // e.g. "Fintech", "Healthcare"
   problem: string;
   solution: string;
-  classDiagramSvg: string; // inline SVG for the example-specific diagram
+  /** Inline SVG string (legacy) or a ClassDiagram object for the example-specific diagram */
+  classDiagramSvg: string | ClassDiagram;
   code: CodeBlock;
+  /**
+   * Optional multi-file layout for the file-explorer view.
+   * When present the Implementation section shows a sidebar with file/folder
+   * structure and a content panel, identical to the Implementation Approaches tab.
+   */
+  codeFiles?: MultiFileCodeBlock;
   considerations: string[];
 }
 
@@ -43,13 +88,35 @@ export interface PatternVariant {
   name: string;
   description: string;
   code: CodeBlock;
+  /**
+   * Optional multi-file layout for the file-explorer view.
+   * When present each language shows a sidebar with file/folder structure
+   * and a content panel with the selected file's code.
+   */
+  codeFiles?: MultiFileCodeBlock;
+  /**
+   * Optional variant-specific class diagram (SVG or Mermaid).
+   * Rendered below the code block in the variant detail panel.
+   */
+  classDiagramSvg?: string | ClassDiagram;
+  /** Narrative explanation accompanying the variant's class diagram. */
+  diagramExplanation?: string;
   pros: string[];
   cons: string[];
+}
+
+export interface SummaryRowItem {
+  title: string;
+  description: string;
 }
 
 export interface SummaryRow {
   aspect: string;
   detail: string;
+  /** Optional structured list of title+description items rendered below the detail text */
+  items?: SummaryRowItem[];
+  /** Optional illustrative code snippet rendered below the detail text */
+  code?: string;
 }
 
 export interface UseCase {
@@ -67,6 +134,15 @@ export interface AntiPattern {
   betterAlternative: string;
 }
 
+export interface PatternReference {
+  title: string;
+  author?: string;
+  year?: number;
+  type: "Book" | "Specification" | "Article" | "Documentation" | "Web";
+  url?: string;
+  description: string;
+}
+
 /** Describes a labeled component in the class diagram for the explanation section */
 export interface DiagramComponent {
   name: string;        // e.g. "Singleton Class"
@@ -80,7 +156,8 @@ export interface PatternData {
   title: string;
   subtitle: string; // one-line description
   intent: string;
-  classDiagramSvg: string; // main overview diagram (with initialization class)
+  /** Main overview class diagram. Accepts an inline SVG string (legacy) or a ClassDiagram object. */
+  classDiagramSvg: string | ClassDiagram;
   /** Explains what's happening in the class diagram, walking through the flow */
   diagramExplanation: string;
   /** Describes each visual component in the class diagram */
@@ -101,4 +178,6 @@ export interface PatternData {
   summary: SummaryRow[];
   /** Anti-patterns — common misuses of the pattern (shown on Summary tab) */
   antiPatterns: AntiPattern[];
+  /** Optional curated references for learners who want to explore further */
+  references?: PatternReference[];
 }

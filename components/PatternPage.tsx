@@ -7,11 +7,21 @@ import {
   UseCase,
   AntiPattern,
   DiagramComponent,
+  ClassDiagram,
+  CodeFile,
   LANGUAGES,
   LANG_COLORS,
   LANG_ICONS,
   Language,
+  SummaryRowItem,
+  PatternReference,
 } from "@/lib/patterns/types";
+
+/** Normalize a legacy SVG string or a ClassDiagram object to a ClassDiagram. */
+function normalizeDiagram(d: string | ClassDiagram): ClassDiagram {
+  if (typeof d === "string") return { type: "svg", content: d };
+  return d;
+}
 
 /** Map display-name → hljs language id */
 const LANG_HLJS: Record<Language, string> = {
@@ -22,8 +32,84 @@ const LANG_HLJS: Record<Language, string> = {
   Rust: "rust",
 };
 
-// ─── Diagram with zoom/pan controls ─────────────────────────────
-function DiagramViewer({ svg }: { svg: string }) {
+// ─── Mermaid diagram renderer (client-side only) ─────────────────
+function MermaidDiagram({ content, className }: { content: string; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function renderDiagram() {
+      if (cancelled || !ref.current) return;
+      const mermaid = (await import("mermaid")).default;
+      const isDark = document.documentElement.dataset.theme === "dark";
+
+      // Match the site's SVG class diagram visual theme (pattern-page.css)
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: "base",
+        themeVariables: {
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: "13px",
+          ...(isDark
+            ? {
+                background: "#0c1222",       // --bg-inset dark
+                primaryColor: "#1e293b",     // --card-bg dark
+                primaryBorderColor: "#334155", // --border-primary dark
+                primaryTextColor: "#94a3b8", // --text-secondary dark
+                secondaryColor: "#1e293b",
+                tertiaryColor: "#0f172a",
+                lineColor: "#64748b",        // --text-tertiary dark
+                textColor: "#94a3b8",
+                edgeLabelBackground: "#0c1222",
+                clusterBkg: "#1e293b",
+                titleColor: "#94a3b8",
+              }
+            : {
+                background: "#f0f2f5",       // --bg-inset light
+                primaryColor: "#ffffff",     // --card-bg light
+                primaryBorderColor: "#e2e8f0", // --border-primary light
+                primaryTextColor: "#475569", // --text-secondary light
+                secondaryColor: "#f8fafc",
+                tertiaryColor: "#f1f5f9",
+                lineColor: "#94a3b8",        // --text-tertiary light
+                textColor: "#475569",
+                edgeLabelBackground: "#f0f2f5",
+                clusterBkg: "#f8fafc",
+                titleColor: "#475569",
+              }),
+        },
+      });
+
+      // Fresh id each render to avoid mermaid element-id conflicts
+      const id = `mermaid-${Math.random().toString(36).slice(2)}`;
+      const { svg } = await mermaid.render(id, content);
+      if (!cancelled && ref.current) {
+        ref.current.innerHTML = svg;
+      }
+    }
+
+    renderDiagram();
+
+    // Re-render whenever the site switches between light and dark mode
+    const observer = new MutationObserver(() => renderDiagram());
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+    };
+  }, [content]);
+
+  return <div ref={ref} className={className} />;
+}
+
+// ─── Diagram with zoom/pan controls ───────────────────────────
+function DiagramViewer({ diagram }: { diagram: string | ClassDiagram }) {
+  const resolved = normalizeDiagram(diagram);
   const [scale, setScale] = useState(1);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -80,11 +166,16 @@ function DiagramViewer({ svg }: { svg: string }) {
         onMouseLeave={handleMouseUp}
         style={{ cursor: isDragging ? "grabbing" : "grab" }}
       >
-        <div
-          className="pp-diagram-svg"
-          style={{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})` }}
-          dangerouslySetInnerHTML={{ __html: svg }}
-        />
+        {resolved.type === "mermaid"
+          ? <div style={{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})` }}>
+              <MermaidDiagram content={resolved.content} className="pp-diagram-svg" />
+            </div>
+          : <div
+              className="pp-diagram-svg"
+              style={{ transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})` }}
+              dangerouslySetInnerHTML={{ __html: resolved.content }}
+            />
+        }
       </div>
       <div className="pp-diagram-toolbar">
         <button onClick={zoomOut} className="pp-diagram-btn" title="Zoom Out">−</button>
@@ -189,13 +280,20 @@ function ExampleDetail({ ex }: { ex: PatternExample }) {
       {/* Class Diagram — simple static view, no zoom controls */}
       <div className="pp-section">
         <h3 className="pp-h3">Class Diagram</h3>
-        <div className="pp-diagram-static" dangerouslySetInnerHTML={{ __html: ex.classDiagramSvg }} />
+        {(() => {
+          const d = normalizeDiagram(ex.classDiagramSvg);
+          return d.type === "mermaid"
+            ? <MermaidDiagram content={d.content} className="pp-diagram-static" />
+            : <div className="pp-diagram-static" dangerouslySetInnerHTML={{ __html: d.content }} />;
+        })()}
       </div>
 
       {/* Code */}
       <div className="pp-section">
         <h3 className="pp-h3">Implementation</h3>
-        <LanguageTabs code={ex.code} />
+        {ex.codeFiles
+          ? <FileExplorerWithTabs codeFiles={ex.codeFiles} />
+          : <LanguageTabs code={ex.code} />}
       </div>
 
       {/* Considerations */}
@@ -213,13 +311,129 @@ function ExampleDetail({ ex }: { ex: PatternExample }) {
   );
 }
 
-// ─── Variant Detail ─────────────────────────────────────────────
+// ─── File Explorer (sidebar + content pane) ─────────────────────────
+/** Group an array of CodeFile objects by their `dir` field. */
+function groupByDir(files: CodeFile[]): Map<string, CodeFile[]> {
+  const map = new Map<string, CodeFile[]>();
+  for (const f of files) {
+    const dir = f.dir ?? "/";
+    if (!map.has(dir)) map.set(dir, []);
+    map.get(dir)!.push(f);
+  }
+  return map;
+}
+
+function FileExplorer({ files, language }: { files: CodeFile[]; language: Language }) {
+  const [selected, setSelected] = useState<CodeFile>(files[0]);
+  const grouped = useMemo(() => groupByDir(files), [files]);
+
+  // Keep selected file in sync when language tab changes
+  useEffect(() => { setSelected(files[0]); }, [files]);
+
+  return (
+    <div className="pp-fileexplorer">
+      {/* Left: file tree */}
+      <div className="pp-fileexplorer__tree">
+        <div className="pp-fileexplorer__tree-label">Files</div>
+        {Array.from(grouped.entries()).map(([dir, dirFiles]) => (
+          <div key={dir} className="pp-fileexplorer__folder">
+            {dir !== "/" && (
+              <div className="pp-fileexplorer__folder-name">
+                <span className="pp-fileexplorer__folder-icon">▸</span>
+                {dir}
+              </div>
+            )}
+            {dirFiles.map((f) => (
+              <button
+                key={f.name}
+                onClick={() => setSelected(f)}
+                className={`pp-fileexplorer__file ${selected?.name === f.name ? "pp-fileexplorer__file--active" : ""}`}
+              >
+                <span className="pp-fileexplorer__file-icon">📄</span>
+                {f.name}
+              </button>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      {/* Right: file content */}
+      <div className="pp-fileexplorer__content">
+        {selected && (
+          <>
+            <div className="pp-fileexplorer__filepath">
+              {selected.dir && selected.dir !== "/" ? `${selected.dir}${selected.name}` : selected.name}
+            </div>
+            <CodeBlock code={selected.content} language={LANG_HLJS[language]} />
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Language Tabs wrapping FileExplorer ───────────────────────────
+function FileExplorerWithTabs({ codeFiles }: { codeFiles: NonNullable<PatternVariant["codeFiles"]> }) {
+  const [active, setActive] = useState<Language>("Python");
+
+  return (
+    <div className="pp-langtabs">
+      <div className="pp-langtabs__bar">
+        {LANGUAGES.map((lang) => {
+          const isActive = active === lang;
+          return (
+            <button
+              key={lang}
+              onClick={() => setActive(lang)}
+              className={`pp-langtabs__btn ${isActive ? "pp-langtabs__btn--active" : ""}`}
+              style={isActive ? {
+                borderTopColor: LANG_COLORS[lang],
+                borderLeftColor: LANG_COLORS[lang],
+                borderRightColor: LANG_COLORS[lang],
+                color: LANG_COLORS[lang],
+              } : undefined}
+            >
+              <span className="pp-langtabs__icon" dangerouslySetInnerHTML={{ __html: LANG_ICONS[lang] }} />
+              {lang}
+            </button>
+          );
+        })}
+      </div>
+      <FileExplorer files={codeFiles[active]} language={active} />
+    </div>
+  );
+}
+
+// ─── Variant Detail ───────────────────────────────────────────────
 function VariantDetail({ variant }: { variant: PatternVariant }) {
   return (
     <div>
       <h2 className="pp-variant__title">{variant.name}</h2>
       <p className="pp-variant__desc">{variant.description}</p>
-      <LanguageTabs code={variant.code} />
+
+      {/* Multi-file explorer when codeFiles is present; fallback to LanguageTabs */}
+      {variant.codeFiles
+        ? <FileExplorerWithTabs codeFiles={variant.codeFiles} />
+        : <LanguageTabs code={variant.code} />
+      }
+
+      {/* Optional per-variant class diagram */}
+      {variant.classDiagramSvg && (
+        <div className="pp-section">
+          <h3 className="pp-h3">Structure Diagram</h3>
+          {variant.diagramExplanation && (
+            <p className="pp-para pp-para--spaced" style={{ marginBottom: 12 }}>
+              {variant.diagramExplanation}
+            </p>
+          )}
+          {(() => {
+            const d = normalizeDiagram(variant.classDiagramSvg);
+            return d.type === "mermaid"
+              ? <MermaidDiagram content={d.content} className="pp-diagram-static" />
+              : <div className="pp-diagram-static" dangerouslySetInnerHTML={{ __html: d.content }} />;
+          })()}
+        </div>
+      )}
 
       <div className="pp-variant__proscons">
         <div className="pp-card pp-card--pros">
@@ -281,6 +495,9 @@ export default function PatternPage({ data }: PatternPageProps) {
     tabs.push(variantsLabel);
   }
   tabs.push("Summary");
+  if (data.references && data.references.length > 0) {
+    tabs.push("References");
+  }
 
   const [topTab, setTopTab] = useState(tabs[0]);
   const [openExample, setOpenExample] = useState(1);
@@ -320,7 +537,7 @@ export default function PatternPage({ data }: PatternPageProps) {
 
             <section className="pp-section" id="class-diagram">
               <h2 className="pp-h2">Class Diagram</h2>
-              <DiagramViewer svg={data.classDiagramSvg} />
+              <DiagramViewer diagram={data.classDiagramSvg} />
             </section>
 
             {/* Explanation — what's happening in the class diagram */}
@@ -484,7 +701,22 @@ export default function PatternPage({ data }: PatternPageProps) {
               {data.summary.map((row) => (
                 <div key={row.aspect} className="pp-summary__row">
                   <div className="pp-summary__aspect">{row.aspect}</div>
-                  <div className="pp-summary__detail">{row.detail}</div>
+                  <div className="pp-summary__detail">
+                    {row.detail}
+                    {row.items && row.items.length > 0 && (
+                      <ul className="pp-summary__items">
+                        {row.items.map((item: SummaryRowItem) => (
+                          <li key={item.title} className="pp-summary__item">
+                            <span className="pp-summary__item-title">{item.title}</span>
+                            <span className="pp-summary__item-desc">{item.description}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {row.code && (
+                      <pre className="pp-usecase__code pp-summary__code">{row.code}</pre>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
@@ -511,6 +743,43 @@ export default function PatternPage({ data }: PatternPageProps) {
                 </div>
               </section>
             )}
+          </div>
+        )}
+
+        {/* ── REFERENCES ── */}
+        {topTab === "References" && (
+          <div>
+            <h2 className="pp-h2">References &amp; Further Reading</h2>
+            <p className="pp-para pp-para--spaced" style={{ marginBottom: 24 }}>
+              Authoritative sources and recommended reading for learners who want to go deeper.
+            </p>
+            <div className="pp-references">
+              {(data.references ?? []).map((ref: PatternReference, i: number) => (
+                <div key={i} className="pp-reference">
+                  <div className="pp-reference__header">
+                    <span className="pp-reference__type">{ref.type}</span>
+                    {ref.url ? (
+                      <a
+                        href={ref.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="pp-reference__title pp-reference__title--link"
+                      >
+                        {ref.title}
+                      </a>
+                    ) : (
+                      <span className="pp-reference__title">{ref.title}</span>
+                    )}
+                  </div>
+                  {(ref.author || ref.year) && (
+                    <div className="pp-reference__meta">
+                      {[ref.author, ref.year].filter(Boolean).join(" · ")}
+                    </div>
+                  )}
+                  <p className="pp-reference__desc">{ref.description}</p>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
